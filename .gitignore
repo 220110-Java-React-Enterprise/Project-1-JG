@@ -3,7 +3,7 @@
 *.properties
 
 # maven build
-/client/target
+/web-app/target
 /orm/target
 
 # specific to VSCode
