@@ -1,0 +1,7 @@
+# general
+*.class
+*.properties
+
+# specific to VSCode
+.vscode/
+.editorconfig
