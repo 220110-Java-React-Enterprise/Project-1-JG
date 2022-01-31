@@ -2,6 +2,10 @@
 *.class
 *.properties
 
+# maven build
+/client/target
+/orm/target
+
 # specific to VSCode
 .vscode/
 .editorconfig
