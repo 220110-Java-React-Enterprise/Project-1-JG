@@ -6,12 +6,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>jg.jg</groupId>
-    <artifactId>client</artifactId>
+    <artifactId>webapp</artifactId>
     <version>0.1</version>
     <!-- generate a WAR file, not a JAR file -->
     <packaging>war</packaging>
 
-    <name>client-webapp</name>
+    <name>webapp</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,7 +37,7 @@
     </dependencies>
 
     <build>
-        <finalName>client</finalName>
+        <finalName>webapp</finalName>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
                 <plugin>
@@ -47,7 +47,7 @@
                     <configuration>
                         <url>http://localhost:8080</url>
                         <server>TomcatServer</server>
-                        <path>/client</path>
+                        <path>/webapp</path>
                     </configuration>
                 </plugin>
                 <plugin>
