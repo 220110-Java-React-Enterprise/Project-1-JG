@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fun.client</groupId>
+    <groupId>fun.jg</groupId>
     <artifactId>client</artifactId>
     <version>0.1</version>
     <!-- generate a WAR file, not a JAR file -->
@@ -36,7 +36,7 @@
         </dependency>
 
         <dependency>
-            <groupId>fun.orm</groupId>
+            <groupId>fun.jg</groupId>
             <artifactId>orm</artifactId>
             <version>0.1</version>
         </dependency>
