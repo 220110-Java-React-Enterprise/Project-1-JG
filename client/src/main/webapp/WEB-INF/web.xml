@@ -27,15 +27,9 @@
 
 
     <!-- DataServlet for data store-->
-    <servlet>
-        <servlet-name>dataServlet</servlet-name>
-        <servlet-class>servlets.DataServlet</servlet-class>
-    </servlet>
 
-    <servlet-mapping>
-        <servlet-name>dataServlet</servlet-name>
-        <url-pattern>/data</url-pattern>
-    </servlet-mapping>
+
+
 
 
 </web-app>
