@@ -13,3 +13,4 @@
 
 # specific to intellij
 .idea/
+.run/
