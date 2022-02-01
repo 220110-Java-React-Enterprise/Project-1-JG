@@ -1,7 +1,5 @@
 package servlets;
 
-import pojos.Game;
-import pojos.Item;
 import utils.DataObject;
 import utils.GlobalStore;
 
