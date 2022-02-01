@@ -10,3 +10,6 @@
 .vscode/
 .editorconfig
 *.code-workspace
+
+# specific to intellij
+.idea/

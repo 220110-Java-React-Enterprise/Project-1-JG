@@ -38,13 +38,4 @@
     </servlet-mapping>
 
 
-    <!-- DataServlet for Game-->
-    <servlet>
-        <servlet-name>gameServlet</servlet-name>
-        <servlet-class>servlets.GameServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>gameServlet</servlet-name>
-        <url-pattern>/game</url-pattern>
-    </servlet-mapping>
 </web-app>
