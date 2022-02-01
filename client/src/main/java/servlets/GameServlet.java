@@ -1,23 +1,20 @@
 package servlets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import pojos.Game;
 import pojos.Item;
-import utils.DataObject;
 import utils.GlobalStore;
-
-import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-public class DataServlet extends HttpServlet {
+public class GameServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        DataObject obj = GlobalStore.getDataObject();
+        Item obj = GlobalStore.getItm();
         ObjectMapper mapper = new ObjectMapper();
         String JSON = mapper.writeValueAsString(obj);
         resp.getWriter().print(JSON);
@@ -27,8 +24,8 @@ public class DataServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();
-        DataObject payload = mapper.readValue(req.getInputStream(), DataObject.class);
-        GlobalStore.setDataObject(payload);
+        Game payload = mapper.readValue(req.getInputStream(), Game.class);
+        GlobalStore.setItm(payload);
         resp.setStatus(202);
     }
 

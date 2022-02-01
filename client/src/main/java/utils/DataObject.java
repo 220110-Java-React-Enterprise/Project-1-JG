@@ -4,6 +4,7 @@ public class DataObject {
     private int num;
     private String str;
     private boolean bool;
+   private int gameCount;
 
 
     public DataObject() {
@@ -40,4 +41,11 @@ public class DataObject {
         this.bool = bool;
     }
 
+    public int getGameCount() {
+        return gameCount;
+    }
+
+    public void setGameCount(int gameCount) {
+        this.gameCount = gameCount;
+    }
 }

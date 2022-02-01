@@ -20,11 +20,11 @@
         <servlet-name>pingServlet</servlet-name>
         <servlet-class>servlets.PingServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>pingServlet</servlet-name>
         <url-pattern>/ping</url-pattern>
     </servlet-mapping>
+
 
     <!-- DataServlet for data store-->
     <servlet>
@@ -35,5 +35,16 @@
     <servlet-mapping>
         <servlet-name>dataServlet</servlet-name>
         <url-pattern>/data</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- DataServlet for Game-->
+    <servlet>
+        <servlet-name>gameServlet</servlet-name>
+        <servlet-class>servlets.GameServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>gameServlet</servlet-name>
+        <url-pattern>/game</url-pattern>
     </servlet-mapping>
 </web-app>
