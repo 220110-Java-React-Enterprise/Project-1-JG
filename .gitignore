@@ -9,3 +9,4 @@
 # specific to VSCode
 .vscode/
 .editorconfig
+*.code-workspace
