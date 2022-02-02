@@ -1,6 +1,6 @@
 package scriptors;
 
-public class SQLScriptor {
+public abstract class SQLScriptor {
     public static String buildSelectIdQueryStatement() {
         // start from having some plain old POJO just for development
         // write the SQL scripts necessary to CRUD, for instance here's a basic Read script:
