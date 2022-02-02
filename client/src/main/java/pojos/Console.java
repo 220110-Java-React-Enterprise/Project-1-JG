@@ -1,7 +1,13 @@
 package pojos;
 
+import annotations.Column;
+import enums.SQLType;
+
 public class Console extends Item {
+    @Column(type = SQLType.VARCHAR)
     private String company;
+    
+    @Column(type = SQLType.VARCHAR)
     private String model;
 
     public Console(String name, Boolean inStock, Double price, String platform, String company, String model) {

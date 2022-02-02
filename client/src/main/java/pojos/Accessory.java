@@ -1,6 +1,10 @@
 package pojos;
 
+import annotations.Column;
+import enums.SQLType;
+
 public class Accessory extends Item {
+    @Column(type = SQLType.VARCHAR)
     private String description;
 
     public Accessory() {

@@ -1,10 +1,21 @@
 package pojos;
 
-public class Game extends Item {
+import annotations.Column;
+import annotations.Table;
+import enums.SQLType;
 
+@Table(tableName = "games")
+public class Game extends Item {
+    @Column(type = SQLType.VARCHAR)
     private String genre;
+
+    @Column(type = SQLType.VARCHAR)
     private String developer;
+
+    @Column(type = SQLType.VARCHAR)
     private String publisher;
+
+    @Column(type = SQLType.INT)
     private Integer year;
 
     public Game(String name, Boolean inStock, Double price, String platform, String genre, String developer, String publisher, Integer year) {

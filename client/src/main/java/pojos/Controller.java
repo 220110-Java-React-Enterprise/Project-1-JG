@@ -1,8 +1,14 @@
 package pojos;
 
+import annotations.Column;
+import enums.SQLType;
+
 public class Controller extends Item {
-        private String maker;
-        private Integer numberOfButtons;
+    @Column(type = SQLType.VARCHAR)
+    private String maker;
+
+    @Column(type = SQLType.INT)
+    private Integer numberOfButtons;
 
     public Controller(String name, Boolean inStock, Double price, String platform, String maker, Integer numberOfButtons) {
         super(name, inStock, price, platform);
@@ -12,9 +18,6 @@ public class Controller extends Item {
 
     public Controller() {
     }
-
-    //getters and setters
-
 
     public void setMaker(String maker) {
         this.maker = maker;

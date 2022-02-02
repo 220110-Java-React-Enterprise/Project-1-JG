@@ -1,9 +1,19 @@
 package pojos;
 
+import annotations.Column;
+import enums.SQLType;
+
 public abstract class Item {
+    @Column(type = SQLType.VARCHAR)
     private String name;
+
+    @Column(type = SQLType.BOOL)
     private Boolean inStock;
+
+    @Column(type = SQLType.NUMERIC)
     private Double price;
+
+    @Column(type = SQLType.VARCHAR)
     private String platform;
 
     public Item() {
