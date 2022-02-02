@@ -1,8 +1,10 @@
 package pojos;
 
 import annotations.Column;
+import annotations.Table;
 import enums.SQLType;
 
+@Table(tableName = "consoles")
 public class Console extends Item {
     @Column(type = SQLType.VARCHAR)
     private String company;

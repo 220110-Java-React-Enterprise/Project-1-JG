@@ -1,8 +1,10 @@
 package pojos;
 
 import annotations.Column;
+import annotations.Table;
 import enums.SQLType;
 
+@Table(tableName = "controllers")
 public class Controller extends Item {
     @Column(type = SQLType.VARCHAR)
     private String maker;
