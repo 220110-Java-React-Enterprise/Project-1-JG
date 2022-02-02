@@ -1,6 +1,6 @@
 package pojos;
 
-public class Item {
+public abstract class Item {
     private String name;
     private Boolean inStock;
     private Double price;
