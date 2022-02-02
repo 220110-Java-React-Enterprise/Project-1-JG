@@ -1,8 +1,6 @@
 package servlets;
 
-import pojos.Accessory;
-import pojos.Game;
-import pojos.Item;
+import pojos.*;
 import utils.DataObject;
 import utils.GlobalStore;
 
@@ -26,19 +24,28 @@ public class DataServlet extends HttpServlet {
         switch (nameOfThing){
             case "accessory" ://code for accessory
                 //Accessory payload = mapper.readValue(req.getInputStream(), Accessory.class);
-                Accessory obj = GlobalStore.getAccessory();
-                String JSON = mapper.writeValueAsString(obj);
-                resp.getWriter().print(JSON);
+                Accessory acc = GlobalStore.getAccessory();
+                String JSONaccessory = mapper.writeValueAsString(acc);
+                resp.getWriter().print(JSONaccessory);
                 resp.setStatus(202);
                 break;
             case "console" ://code for console. just copy accessory
-                resp.setStatus(501);
+                Console con = GlobalStore.getConsole();
+                String JSONconsole = mapper.writeValueAsString(con);
+                resp.getWriter().print(JSONconsole);
+                resp.setStatus(202);
                 break;
             case "controller" ://code for controller
-                resp.setStatus(501);
+                Controller cont = GlobalStore.getController();
+                String JSONcontroller = mapper.writeValueAsString(cont);
+                resp.getWriter().print(JSONcontroller);
+                resp.setStatus(202);
                 break;
             case "game" ://code for game
-                resp.setStatus(501);
+                Game game = GlobalStore.getGame();
+                String JSONgame = mapper.writeValueAsString(game);
+                resp.getWriter().print(JSONgame);
+                resp.setStatus(202);
                 break;
             default://code for default
                 resp.setStatus(501);
@@ -63,18 +70,24 @@ public class DataServlet extends HttpServlet {
 
         switch (nameOfThing){
             case "accessory" ://code for accessory
-                Accessory payload = mapper.readValue(req.getInputStream(), Accessory.class);
-                GlobalStore.setAccessory(payload);
+                Accessory payloadAccessory = mapper.readValue(req.getInputStream(), Accessory.class);
+                GlobalStore.setAccessory(payloadAccessory);
                 resp.setStatus(202);
                 break;
             case "console" ://code for console
-                resp.setStatus(501);
+                Console payloadConsole = mapper.readValue(req.getInputStream(), Console.class);
+                GlobalStore.setConsole(payloadConsole);
+                resp.setStatus(202);
                 break;
             case "controller" ://code for controller
-                resp.setStatus(501);
+                Controller payloadController = mapper.readValue(req.getInputStream(), Controller.class);
+                GlobalStore.setController(payloadController);
+                resp.setStatus(202);
                 break;
             case "game" ://code for game
-                resp.setStatus(501);
+                Game payloadGame = mapper.readValue(req.getInputStream(), Game.class);
+                GlobalStore.setGame(payloadGame);
+                resp.setStatus(202);
                 break;
             default://code for default
                 resp.setStatus(501);
