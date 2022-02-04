@@ -17,6 +17,7 @@ public class ConnectionManager {
     /**
      * Get the connection manager if it exists.
      * @return the Connection object
+     * @throws IllegalStateException when the 
      */
     public static Connection getConnection() throws IllegalStateException {
         if (connection == null) {
@@ -29,16 +30,17 @@ public class ConnectionManager {
 
     /**
      * Database connection logic.
+     * @param connectionString string for connecting to database
      * @return connection object created
+     * @throws SQLException when the database fails to connect
      */
-    public static void connect(String connectionString) {
+    public static void connect(String connectionString) throws SQLException {
         try {
             // make connection given connectionString
             connection = DriverManager.getConnection(connectionString);
 
-        } catch (SQLException  e) {
-            System.out.println("Database connection unsuccessful!" + 
-            "Either the database does not exist, or the connection failed.");
+        } catch (SQLException e) {
+            throw new SQLException("Database connection unsuccessful! Either the database does not exist, or the connection failed.");
         }
     }
 }
