@@ -38,6 +38,7 @@ public class DataServlet extends HttpServlet {
                 Controller cont = GlobalStore.getController();
                 String JSONcontroller = mapper.writeValueAsString(cont);
                 resp.getWriter().print(JSONcontroller);
+
                 resp.setStatus(202);
                 break;
             case "game" ://code for game
@@ -75,6 +76,7 @@ public class DataServlet extends HttpServlet {
                 break;
             case "console" ://code for console
                 Console payloadConsole = mapper.readValue(req.getInputStream(), Console.class);
+
                 GlobalStore.setConsole(payloadConsole);
                 resp.setStatus(202);
                 break;
