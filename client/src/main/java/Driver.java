@@ -1,5 +1,6 @@
 //import org.junit.Test;
 import pojos.Game;
+import utils.DatabaseConnector;
 
 public class Driver {
     public static void main(String[] args) {
@@ -9,6 +10,12 @@ public class Driver {
         orm.jasonTestingCrap();
 
         //end testing code
+
+
+
+
+        // trying to connect to database
+        orm.startConnection(DatabaseConnector.getConnectionString());
     }
 
     //@Test
