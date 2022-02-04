@@ -9,10 +9,10 @@ public class MainClient {
 //        methodOne();
 //    }
 //
-    public void methodOne(int str) {
-        str = "Create an error";
-
-        }
+//    public void methodOne(int str) {
+//        str = "Create an error";
+//
+//        }
 //
 ////    public static void methodTwo() {
 ////        methodThree();
