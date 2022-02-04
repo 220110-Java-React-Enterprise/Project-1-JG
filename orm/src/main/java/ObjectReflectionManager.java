@@ -77,7 +77,5 @@ public class ObjectReflectionManager {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        // start the connection
-        ConnectionManager.connect(connectionString);
     }
 }
