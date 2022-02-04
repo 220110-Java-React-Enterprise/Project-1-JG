@@ -1,6 +1,7 @@
 import utils.ConnectionManager;
 
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 
 public class ObjectReflectionManager {
     private Object obj;//added so we can pass our objects to this
@@ -41,17 +42,14 @@ public class ObjectReflectionManager {
 
     /**
      * Start the connection with the database when given a connectionString.
+     * @param connectionString string for connecting to database
      */
     public void startConnection(String connectionString) {
         // see if the database is already connected
         try {
-            ConnectionManager.getConnection();
-        } catch (IllegalStateException e) {
-            System.out.println("Connection already started!");
-            return;
+            ConnectionManager.connect(connectionString);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-
-        // start the connection
-        ConnectionManager.connect(connectionString);
     }
 }
