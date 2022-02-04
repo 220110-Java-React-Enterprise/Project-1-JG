@@ -1,7 +1,6 @@
 package servlets;
 
 import pojos.*;
-import utils.DataObject;
 import utils.GlobalStore;
 
 import java.io.IOException;
