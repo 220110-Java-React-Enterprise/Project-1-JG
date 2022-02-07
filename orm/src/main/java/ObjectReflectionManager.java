@@ -18,6 +18,8 @@ public class ObjectReflectionManager {
     public void objectSorter(){
         String objectBeingSentIn = this.obj.getClass().getCanonicalName();//gets what object class this is
 
+        System.out.println("Name of object: " + objectBeingSentIn);
+
         Field[] idk = obj.getClass().getDeclaredFields();
         for(int i=0;i<idk.length;i++){
             idk[i].setAccessible(true);
