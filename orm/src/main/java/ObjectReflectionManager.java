@@ -1,3 +1,4 @@
+import scriptors.SQLScriptor;
 import utils.ConnectionManager;
 
 import java.lang.reflect.Field;
@@ -13,7 +14,7 @@ public class ObjectReflectionManager {
     /**
      * Empty default constructor.
      */
-    public ObjectReflectionManager() {}
+    public ObjectReflectionManager() {}//should the logic code go here?
 
     public void objectSorter(){
         String objectBeingSentIn = this.obj.getClass().getCanonicalName();//gets what object class this is
@@ -23,6 +24,9 @@ public class ObjectReflectionManager {
             idk[i].setAccessible(true);
             System.out.println(idk[i]);
         }
+
+        SQLScriptor.createQueryStatement(this.obj);
+
 /*
         switch(objectBeingSentIn){
             case "class pojos.Accessory":
@@ -47,7 +51,6 @@ public class ObjectReflectionManager {
         }
 */
     }
-
 
 /*
     public void jasonTestingCrap(){//there's a bunch of useful reflection examples in here
