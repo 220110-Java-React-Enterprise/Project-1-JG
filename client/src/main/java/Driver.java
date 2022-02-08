@@ -13,11 +13,9 @@ public class Driver {
         orm.setReflectionObject(darkSouls2ScholarOfTheFirstSin);
 
         orm.objectSorter();//this calls whatever the approiate code is to put in database
-
-
-
-
+      
         // trying to connect to database
         orm.startConnection(DatabaseConnector.getConnectionString());
     }
 }
+
