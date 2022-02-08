@@ -4,6 +4,9 @@ import annotations.Column;
 import enums.SQLType;
 
 public abstract class Item {
+    @Column(type = SQLType.INT, primaryKey = true, nonNull = true)
+    private Integer id;
+
     @Column(type = SQLType.VARCHAR)
     private String name;
 

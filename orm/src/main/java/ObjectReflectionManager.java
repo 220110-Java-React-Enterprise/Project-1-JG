@@ -14,7 +14,7 @@ public class ObjectReflectionManager {
     /**
      * Empty default constructor.
      */
-    public ObjectReflectionManager() {}
+    public ObjectReflectionManager() {}//should the logic code go here?
 
 
     public void objectSorter(){
@@ -28,7 +28,6 @@ public class ObjectReflectionManager {
             System.out.println(idk[i]);
         }
 
-        // try to create a new table
         try {
             System.out.println(SQLScriptor.buildCreateTableStatement(this.obj));
         } catch (MalformedTableException e) {
@@ -36,13 +35,13 @@ public class ObjectReflectionManager {
         }
     }
 
-
     /**
      * Sets the object that we currently want to reflect on.
      * @param obj object to reflect on
      */
     public void setReflectionObject(Object obj) {
         this.obj = obj;
+
     }
 
 

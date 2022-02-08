@@ -2,6 +2,9 @@ package scriptors;
 
 import java.lang.reflect.Field;
 
+
+import annotations.Column;
+
 import annotations.Table;
 import exceptions.MalformedTableException;
 
@@ -35,6 +38,12 @@ public abstract class SQLScriptor {
         for (int i = 0 ; i < fields.length ; i++) {
             //TODO need to check for @Column and add its stuff if appropriate (VARCHAR, length, etc.)
 
+
+            //checks for @Column now, does not verify field type
+            if (!fields[i].isAnnotationPresent(Column.class)){
+                throw new MalformedTableException("Missing @Column annotation.");
+            }
+
             // fields set to be accessible temporarily
             fields[i].setAccessible(true);
 
@@ -61,11 +70,42 @@ public abstract class SQLScriptor {
      * @param obj object to reflect upon
      * @return SQL statement for inserting an object
      */
-    public static String buildInsertStatement(Object obj){
-        String result = "";
-        
+
+    public static String buildInsertStatement(Object obj) throws MalformedTableException {
+
+        if (!obj.getClass().isAnnotationPresent(Table.class)) {
+            throw new MalformedTableException("Missing @Table annotation.");
+        }
+        String result = "INSERT INTO ";
+        String tableName = obj.getClass().getAnnotation(Table.class).tableName();
+        result += tableName + " (";
+        Field[] fields = obj.getClass().getDeclaredFields();
+
+        for (int i = 0 ; i < fields.length ; i++) {
+            if (!fields[i].isAnnotationPresent(Column.class)){
+                throw new MalformedTableException("Missing @Column annotation.");
+            }
+            fields[i].setAccessible(true);
+            if (i < fields.length - 1) {
+                result += nameCleaner(fields[i].toString()) + ", ";
+            }
+            else {
+                result += nameCleaner(fields[i].toString()) + ")";
+            }
+            fields[i].setAccessible(false);
+        }
+        result += " VALUES (";
+        for (int i=0;i<fields.length;i++)
+            if (i < fields.length - 1)
+                result +="?,";
+            else
+                result += "?)";
+
+        System.out.println(result);
+
         return result;
-    }
+    }//end build insert
+
 
 
     /**
@@ -73,22 +113,35 @@ public abstract class SQLScriptor {
      * @param obj object to reflect upon
      * @return SQL statement for deleting an object
      */
-    public static String buildDeleteStatement(Object obj){
-        String result = "";
-        
+
+    public static String buildDeleteStatement(Object obj) throws MalformedTableException {
+        if (!obj.getClass().isAnnotationPresent(Table.class)) {
+            throw new MalformedTableException("Missing @Table annotation.");
+        }
+        String result = "DELETE FROM ";
+        String tableName = obj.getClass().getAnnotation(Table.class).tableName();
+        result += tableName + " WHERE id=";
+        Field[] fields = obj.getClass().getDeclaredFields();
+        result += fields[0].toString();
+
+        System.out.println(result);
+
+
         return result;
     }
 
 
     /**
      * Helper function that retrieves the last name from a reflection'd string.
+
      * @param reflectedString reflected string from the reflection calls 
+
      * @return name of the reflected thing that we care about
      */
     public static String nameCleaner(String reflectedString){
         // split on periods
         String arr[] = reflectedString.split("[.]");
-        
+
         // only care about the last thing
         return arr[arr.length-1];
     }
