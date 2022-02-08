@@ -12,7 +12,7 @@ public class FileLogger {
 
 
     private FileLogger() {
-        filePath = "logs/";
+        filePath = "/Team-Fun/orm/logs/"; //?
         consoleOutput = false;
         stackTraceSize = 10;
     }
