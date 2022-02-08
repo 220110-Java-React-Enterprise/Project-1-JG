@@ -33,6 +33,8 @@ public abstract class SQLScriptor {
 
         // iterate through the fields
         for (int i = 0 ; i < fields.length ; i++) {
+            //TODO need to check for @Column and add its stuff if appropriate (VARCHAR, length, etc.)
+
             // fields set to be accessible temporarily
             fields[i].setAccessible(true);
 
