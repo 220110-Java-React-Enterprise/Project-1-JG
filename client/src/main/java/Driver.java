@@ -32,10 +32,6 @@ public class Driver {
 //        }
 
 
-
-
-
-
 //        //testing code
 //        Game darkSouls2ScholarOfTheFirstSin = new Game("Dark Souls 2", true, 15.99, "PS3", "Awesome", "From Software", "Bandai Namco", 2014);
 //        ObjectReflectionManager orm = new ObjectReflectionManager(darkSouls2ScholarOfTheFirstSin);
@@ -74,4 +70,5 @@ public class Driver {
 //        orm.objectSorter();//this calls whatever the approiate code is to put in database
 //>>>>>>> e99c5c0475f635ca5ef1d8e5551fd1a989be5a6b
     }
+}
 
