@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //import org.junit.Test;
 //<<<<<<< HEAD
 //import pojos.Game;
@@ -30,8 +31,23 @@ public class Driver {
 //        public static void logException(Exception e) {
 //            FileLogger.getFileLogger().log(e);
 //        }
+=======
+import pojos.Game;
+import utils.DatabaseConnector;
 
+public class Driver {
+    public static void main(String[] args) {
+        // initialize the ORM
+        ObjectReflectionManager orm = new ObjectReflectionManager();
 
+        // make a Game for testing
+        Game darkSouls2ScholarOfTheFirstSin = new Game("Dark Souls 2", true, 15.99, "PS3", "Awesome", "From Software", "Bandai Namco", 2014);
+>>>>>>> 8abef884c2b9509de773dcbcb8cd56d997fb96e9
+
+        // set the game to be reflected upon by ORM
+        orm.setReflectionObject(darkSouls2ScholarOfTheFirstSin);
+
+<<<<<<< HEAD
 //        //testing code
 //        Game darkSouls2ScholarOfTheFirstSin = new Game("Dark Souls 2", true, 15.99, "PS3", "Awesome", "From Software", "Bandai Namco", 2014);
 //        ObjectReflectionManager orm = new ObjectReflectionManager(darkSouls2ScholarOfTheFirstSin);
@@ -69,6 +85,12 @@ public class Driver {
 //        ObjectReflectionManager orm = new ObjectReflectionManager(darkSouls2ScholarOfTheFirstSin);
 //        orm.objectSorter();//this calls whatever the approiate code is to put in database
 //>>>>>>> e99c5c0475f635ca5ef1d8e5551fd1a989be5a6b
+=======
+        orm.objectSorter();//this calls whatever the approiate code is to put in database
+      
+        // trying to connect to database
+        orm.startConnection(DatabaseConnector.getConnectionString());
+>>>>>>> 8abef884c2b9509de773dcbcb8cd56d997fb96e9
     }
 }
 

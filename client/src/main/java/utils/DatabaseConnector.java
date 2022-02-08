@@ -1,7 +1,7 @@
 package utils;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class DatabaseConnector {
@@ -37,12 +37,17 @@ public class DatabaseConnector {
          *   replace <> with respective information
          */
         try {
-            // make a Properties object
+            // properties file
             Properties props = new Properties();
-            
-            // open FileReader & read in properties
-            FileReader fr = new FileReader("src/main/resources/jdbc.properties");
-            props.load(fr);
+
+            // retrive class loader from current thread
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+
+            // input stream tied to file (from classpath)
+            InputStream input = loader.getResourceAsStream("jdbc.properties");
+
+            // load the properties
+            props.load(input);
 
             // create the connectionString
             //TODO auto create database on orm side based on name here?
