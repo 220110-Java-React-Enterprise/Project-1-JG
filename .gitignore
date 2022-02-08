@@ -1,6 +1,7 @@
 # general
 *.class
 *.properties
+*.log
 
 # maven build
 /client/target

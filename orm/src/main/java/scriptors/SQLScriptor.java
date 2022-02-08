@@ -1,63 +1,95 @@
 package scriptors;
 
 import java.lang.reflect.Field;
-import java.util.Locale;
+
+import annotations.Table;
+import exceptions.MalformedTableException;
 
 public abstract class SQLScriptor {
-    public static String buildSelectIdQueryStatement(Object obj) {
-        // start from having some plain old POJO just for development
-        // write the SQL scripts necessary to CRUD, for instance here's a basic Read script:
-        //String sql = "SELECT * FROM table WHERE id = ?";
-        // now ask how we could have our software build that same script without knowing anything about that POJO ahead of time
-        String firstPart = "SELECT * FROM ";
-        String tablename = "";                  // reflect on the object to get this
-        String nextPart = " WHERE ";
-        String filterColumn = "";               // reflect upon the object for this data as well
-        String parameterList = " = ?";
-        // now we have our script and just need to build it:
-        String script = firstPart + tablename + nextPart + filterColumn + parameterList;
-        /**
-         * now we can create the preparedStatement and parameterize it.
-         * 
-         * In fact we don't even need to parameterize it here,
-         * I prefer to hand the pstmt back in the return value of the script method, and go from there -Kyle
-        */
-        return script;
-    }
-
-    public static String createQueryStatement(Object obj){//can also pass array of strings or something to these methods
-        String result = "CREATE TABLE ";
-        String tableName = obj.getClass().getCanonicalName(); //this still includes the pojos. part of the name
-        result += nameCleaner(tableName).toLowerCase() + "s (";
-        Field[] fields = obj.getClass().getDeclaredFields();
-        for(int i=0;i<fields.length;i++){
-            fields[i].setAccessible(true);
-            //run name cleaning method here
-
-            if(i== fields.length-1)
-                result += nameCleaner(fields[i].toString())+")";
-                else
-            result += nameCleaner(fields[i].toString()) + ", ";
+    /**
+     * Creates the SQL statement to create a table based on the @Table annotation, if the annotation is present.
+     *   The table will not be created if it already exists.
+     * @param obj object to reflect upon
+     * @return SQL statement for creating a table
+     * @throws MalformedTableException if there are missing annotations for the Table or Column(s)
+     */
+    public static String buildCreateTableStatement(Object obj) throws MalformedTableException {
+        // check if the @Table annotation is NOT present
+        if (!obj.getClass().isAnnotationPresent(Table.class)) {
+            throw new MalformedTableException("Missing @Table annotation.");
         }
 
-        System.out.println(result);//this outputs CREATE TABLE pojos.Game ( private java.lang.String pojos.Game.genre, private java.lang.String pojos.Game.developer, private java.lang.String pojos.Game.publisher, private java.lang.Integer pojos.Game.year,; need to fix the last comma
-                                    //basically outputs the data we want but with all the junk attached. Make a method that cleans these up
-                                    //does not utilize PreparedStatement() think of a way to use that
+        // start the statement
+        String result = "CREATE TABLE IF NOT EXISTS ";
+
+        // retrieve the name of the table, specified in the @Table annotation on the object
+        String tableName = obj.getClass().getAnnotation(Table.class).tableName();
+
+        // add the table name to the result string
+        result += tableName + " (";
+
+        // retrieve the fields available to the class
+        Field[] fields = obj.getClass().getDeclaredFields();
+
+        // iterate through the fields
+        for (int i = 0 ; i < fields.length ; i++) {
+            //TODO need to check for @Column and add its stuff if appropriate (VARCHAR, length, etc.)
+
+            // fields set to be accessible temporarily
+            fields[i].setAccessible(true);
+
+            // add each field to the result string, comma-separated
+            if (i < fields.length - 1) {
+                result += nameCleaner(fields[i].toString()) + ", ";
+            }
+            // finish with a )
+            else {
+                result += nameCleaner(fields[i].toString()) + ")";
+            }
+
+            // set fields back to inaccessible
+            fields[i].setAccessible(false);
+        }
+
+        // return string ready for PreparedStatement
         return result;
     }
 
-    public static String insertQueryStatement(Object obj){
+
+    /**
+     * Creates the SQL statement to insert an object into the table.
+     * @param obj object to reflect upon
+     * @return SQL statement for inserting an object
+     */
+    public static String buildInsertStatement(Object obj){
         String result = "";
-        //this will put our object into the correct table
+        
         return result;
     }
-    public static String deleteQueryStatement(Object obj){
+
+
+    /**
+     * Creates the SQL statement to delete an object from the table.
+     * @param obj object to reflect upon
+     * @return SQL statement for deleting an object
+     */
+    public static String buildDeleteStatement(Object obj){
         String result = "";
-        //this deletes an object from a table
+        
         return result;
     }
-    public static String nameCleaner(String result){
-        String arr[] = result.split("[.]");
+
+
+    /**
+     * Helper function that retrieves the last name from a reflection'd string.
+     * @param reflectedString reflected string from the reflection calls 
+     * @return name of the reflected thing that we care about
+     */
+    public static String nameCleaner(String reflectedString){
+        // split on periods
+        String arr[] = reflectedString.split("[.]");
+        
+        // only care about the last thing
         return arr[arr.length-1];
     }
 }
