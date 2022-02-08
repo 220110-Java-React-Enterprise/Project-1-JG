@@ -20,6 +20,5 @@ public @interface Column {
     boolean nonNull() default false;
 
     // the length limit of a given column
-    // TODO what is this exactly?
     int length() default -1;
 }
