@@ -7,16 +7,14 @@ import java.sql.SQLException;
 import exceptions.MalformedTableException;
 
 public class ObjectReflectionManager {
-    private Object obj;//added so we can pass our objects to this
-
-    public ObjectReflectionManager(Object obj) {//added so we can construct this with our object inside
-        this.obj = obj;
-    }
+    // object to use for processing
+    private Object obj;
 
     /**
      * Empty default constructor.
      */
-    public ObjectReflectionManager() {}//should the logic code go here?
+    public ObjectReflectionManager() {}
+
 
     public void objectSorter(){
         String objectBeingSentIn = this.obj.getClass().getCanonicalName();//gets what object class this is
@@ -37,6 +35,16 @@ public class ObjectReflectionManager {
             System.out.println(e.getMessage());
         }
     }
+
+
+    /**
+     * Sets the object that we currently want to reflect on.
+     * @param obj object to reflect on
+     */
+    public void setReflectionObject(Object obj) {
+        this.obj = obj;
+    }
+
 
     /**
      * Start the connection with the database when given a connectionString.
