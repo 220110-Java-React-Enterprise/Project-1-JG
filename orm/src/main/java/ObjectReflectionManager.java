@@ -23,6 +23,17 @@ public class ObjectReflectionManager {
             idk[i].setAccessible(true);
             System.out.println(idk[i]);
         }
+
+
+
+
+
+
+
+
+
+
+
 /*
         switch(objectBeingSentIn){
             case "class pojos.Accessory":

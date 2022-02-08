@@ -17,6 +17,9 @@ public abstract class SQLScriptor {
 
         // now we have our script and just need to build it:
         String script = firstPart + tablename + nextPart + filterColumn + parameterList;
+
+
+
         
 
         /**
