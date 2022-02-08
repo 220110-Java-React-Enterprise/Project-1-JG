@@ -1,5 +1,6 @@
 import scriptors.SQLScriptor;
 import utils.ConnectionManager;
+import utils.FileLogger;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -31,8 +32,7 @@ public class ObjectReflectionManager {
         try {
             System.out.println(SQLScriptor.buildCreateTableStatement(this.obj));
         } catch (MalformedTableException e) {
-            //TODO do something with file logger
-            System.out.println(e.getMessage());
+            FileLogger.getFileLogger().log(e);
         }
     }
 
@@ -55,7 +55,7 @@ public class ObjectReflectionManager {
         try {
             ConnectionManager.connect(connectionString);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            FileLogger.getFileLogger().log(e);
         }
     }
 }
