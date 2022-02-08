@@ -6,14 +6,12 @@ import java.time.format.DateTimeFormatter;
 public class FileLogger {
     private static FileLogger fileLogger;
     private static String filePath;
-    private static boolean consoleOutput;
     private static int stackTraceSize;
 
 
 
     private FileLogger() {
-        filePath = "logs/"; //?
-        consoleOutput = false;
+        filePath = "logs/";
         stackTraceSize = 10;
     }
 
