@@ -64,16 +64,55 @@ public abstract class SQLScriptor {
      * @param obj object to reflect upon
      * @return SQL statement for inserting an object
      */
+<<<<<<< HEAD
     public static String buildInsertStatement(Object obj){
         String result = "";
         return result;
     }
     
+=======
+    // INSERT INTO ___ (field1, field2, ...) VALUES (?,?,...)
+    public static String buildInsertStatement(Object obj) throws MalformedTableException {
+        if (!obj.getClass().isAnnotationPresent(Table.class)) {
+            throw new MalformedTableException("Missing @Table annotation for " + obj.getClass().getSimpleName() + ".");
+        }
+
+        String tableName = obj.getClass().getAnnotation(Table.class).tableName();
+        String result = "INSERT INTO " + tableName + " (";
+
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (int i = 0 ; i < fields.length ; i++) {
+            if (!fields[i].isAnnotationPresent(Column.class)){
+                throw new MalformedTableException("Missing @Column annotation for " + fields[i].getName() + ".");
+            }
+            fields[i].setAccessible(true);
+            if (i < fields.length - 1) {
+                result += nameCleaner(fields[i].toString()) + ", ";
+            }
+            else {
+                result += nameCleaner(fields[i].toString()) + ")";
+            }
+            fields[i].setAccessible(false);
+        }
+        result += " VALUES (";
+        for (int i=0;i<fields.length;i++)
+            if (i < fields.length - 1)
+                result +="?,";
+            else
+                result += "?)";
+
+        return result;
+    }
+
+
+
+>>>>>>> 150caa21d7443aec2e0fec48d359b1ac0a373ece
     /**
      * Creates the SQL statement to delete an object from the table.
      * @param obj object to reflect upon
      * @return SQL statement for deleting an object
      */
+<<<<<<< HEAD
     public static String buildDeleteStatement(Object obj) throws MalformedTableException {
         // check if the @Table annotation is NOT present
         if (!obj.getClass().isAnnotationPresent(Table.class)) {
@@ -127,7 +166,7 @@ public abstract class SQLScriptor {
     public static String nameCleaner(String reflectedString){
         // split on periods
         String arr[] = reflectedString.split("[.]");
-        
+
         // only care about the last thing
         return arr[arr.length-1];
     }
