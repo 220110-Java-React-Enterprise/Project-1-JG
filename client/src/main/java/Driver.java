@@ -1,37 +1,3 @@
-<<<<<<< HEAD
-//import org.junit.Test;
-//<<<<<<< HEAD
-//import pojos.Game;
-
-import java.sql.SQLException;
-
-public class Driver {
-    public static void main(String[] args) throws SQLException {
-
-//        FileLogger.getFileLogger().log("This is our message!");
-//            methodOne();
-//        }
-//
-//        public static void methodOne() {
-//            methodTwo();
-//        }
-//
-//        public static void methodTwo() {
-//            methodThree();
-//        }
-//
-//        public static void methodThree() {
-//            logException(new SQLException("Three methods deep"));
-//        }
-//
-//        public static void logMessage(String msg) {
-//            FileLogger.getFileLogger().log(msg);
-//        }
-//
-//        public static void logException(Exception e) {
-//            FileLogger.getFileLogger().log(e);
-//        }
-=======
 import pojos.Game;
 import utils.DatabaseConnector;
 
@@ -40,57 +6,6 @@ public class Driver {
         // initialize the ORM
         ObjectReflectionManager orm = new ObjectReflectionManager();
 
-        // make a Game for testing
-        Game darkSouls2ScholarOfTheFirstSin = new Game("Dark Souls 2", true, 15.99, "PS3", "Awesome", "From Software", "Bandai Namco", 2014);
->>>>>>> 8abef884c2b9509de773dcbcb8cd56d997fb96e9
-
-        // set the game to be reflected upon by ORM
-        orm.setReflectionObject(darkSouls2ScholarOfTheFirstSin);
-
-<<<<<<< HEAD
-//        //testing code
-//        Game darkSouls2ScholarOfTheFirstSin = new Game("Dark Souls 2", true, 15.99, "PS3", "Awesome", "From Software", "Bandai Namco", 2014);
-//        ObjectReflectionManager orm = new ObjectReflectionManager(darkSouls2ScholarOfTheFirstSin);
-//        orm.jasonTestingCrap();
-
-//        //end testing code
-//=======
-//
-//
-//import pojos.Game;
-//import utils.DatabaseConnector;
-//
-//public class Driver {
-//    public static void main(String[] args) {
-//        Game darkSouls2ScholarOfTheFirstSin = new Game("Dark Souls 2", true, 15.99, "PS3", "Awesome", "From Software", "Bandai Namco", 2014);
-//        ObjectReflectionManager orm = new ObjectReflectionManager(darkSouls2ScholarOfTheFirstSin);
-//        orm.objectSorter();//this calls whatever the approiate code is to put in database
-//        //end testing code
-//
-//
-//
-//
-//        // trying to connect to database
-//        orm.startConnection(DatabaseConnector.getConnectionString());
-//>>>>>>> e99c5c0475f635ca5ef1d8e5551fd1a989be5a6b
-//    }
-//
-//    //@Test
-//    public static void jasonTestingCrap(){
-//<<<<<<< HEAD
-////couldn't figure out how to get this to work so I moved the code into main since it was empty
-//// please put the code in main back in here when/if you decide to write stuff in main
-//=======
-//        Game darkSouls2ScholarOfTheFirstSin = new Game("Dark Souls 2", true, 15.99, "PS3", "Awesome", "From Software", "Bandai Namco", 2014);
-//        ObjectReflectionManager orm = new ObjectReflectionManager(darkSouls2ScholarOfTheFirstSin);
-//        orm.objectSorter();//this calls whatever the approiate code is to put in database
-//>>>>>>> e99c5c0475f635ca5ef1d8e5551fd1a989be5a6b
-=======
-        orm.objectSorter();//this calls whatever the approiate code is to put in database
-      
-        // trying to connect to database
-        orm.startConnection(DatabaseConnector.getConnectionString());
->>>>>>> 8abef884c2b9509de773dcbcb8cd56d997fb96e9
     }
 }
 
