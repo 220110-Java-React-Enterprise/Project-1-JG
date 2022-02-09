@@ -4,10 +4,12 @@ import annotations.Column;
 import annotations.Table;
 import enums.SQLType;
 
+
 @Table(tableName = "items")
 public class Item {
     @Column(type = SQLType.INT, primaryKey = true, nonNull = true)
     private Integer item_id;
+
 
     @Column(type = SQLType.VARCHAR)
     private String name;

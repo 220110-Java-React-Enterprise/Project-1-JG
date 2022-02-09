@@ -41,6 +41,7 @@ public abstract class SQLScriptor {
 
             //checks for @Column now, does not verify field type
             if (!fields[i].isAnnotationPresent(Column.class)){
+
                 throw new MalformedTableException("Missing @Column annotation for " + fields[i].getName() + ".");
             }
 
@@ -71,6 +72,7 @@ public abstract class SQLScriptor {
      * @return SQL statement for inserting an object
      * @throws MalformedTableException if the @Table and any @Column annotations are missing
      */
+
     // INSERT INTO ___ (field1, field2, ...) VALUES (?,?,...)
     public static String buildInsertStatement(Object obj) throws MalformedTableException {
         if (!obj.getClass().isAnnotationPresent(Table.class)) {
@@ -84,6 +86,7 @@ public abstract class SQLScriptor {
         for (int i = 0 ; i < fields.length ; i++) {
             if (!fields[i].isAnnotationPresent(Column.class)){
                 throw new MalformedTableException("Missing @Column annotation for " + fields[i].getName() + ".");
+
             }
             fields[i].setAccessible(true);
             if (i < fields.length - 1) {
@@ -101,8 +104,10 @@ public abstract class SQLScriptor {
             else
                 result += "?)";
 
+
         return result;
-    }
+    }//end build insert
+
 
 
 
@@ -113,18 +118,18 @@ public abstract class SQLScriptor {
      * @throws MalformedTableException if the @Table annotation is missing
      */
     // DELETE FROM ___ WHERE tableName_id = ?
-    public static String buildDeleteStatement(Object obj) throws MalformedTableException {
-        if (!obj.getClass().isAnnotationPresent(Table.class)) {
-            throw new MalformedTableException("Missing @Table annotation for " + obj.getClass().getSimpleName() + ".");
-        }
-
-        String tableName = obj.getClass().getAnnotation(Table.class).tableName();
-
-        //TODO fix this
-        String result = "DELETE FROM " + tableName + " WHERE " + tableName + "_id = ?";
-
-        return result;
-    }
+//    public static String buildDeleteStatement(Object obj) throws MalformedTableException {
+//        if (!obj.getClass().isAnnotationPresent(Table.class)) {
+//            throw new MalformedTableException("Missing @Table annotation for " + obj.getClass().getSimpleName() + ".");
+//        }
+//
+//        String tableName = obj.getClass().getAnnotation(Table.class).tableName();
+//
+//        //TODO fix this
+//        String result = "DELETE FROM " + tableName + " WHERE " + tableName + "_id = ?";
+//
+//        return result;
+//    }
 
 
     /**
@@ -160,10 +165,36 @@ public abstract class SQLScriptor {
         return result;
     }
 
+    /**
+     * Creates the SQL statement to delete an object from the table.
+     * @param obj object to reflect upon
+     * @return SQL statement for deleting an object
+     */
+
+    public static String buildDeleteStatement(Object obj) throws MalformedTableException {
+        if (!obj.getClass().isAnnotationPresent(Table.class)) {
+            throw new MalformedTableException("Missing @Table annotation.");
+        }
+        String result = "DELETE FROM ";
+        String tableName = obj.getClass().getAnnotation(Table.class).tableName();
+        result += tableName + " WHERE id=";
+        Field[] fields = obj.getClass().getDeclaredFields();
+        result += fields[0].toString();
+
+        System.out.println(result);
+
+
+        return result;
+    }
+
+
+
 
     /**
      * Helper function that retrieves the last name from a reflection'd string.
+
      * @param reflectedString reflected string from the reflection calls 
+
      * @return name of the reflected thing that we care about
      */
     public static String nameCleaner(String reflectedString){
