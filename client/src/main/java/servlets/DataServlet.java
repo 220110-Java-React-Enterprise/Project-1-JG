@@ -1,7 +1,11 @@
 package servlets;
 
+import exceptions.MalformedTableException;
 import pojos.*;
 import repos.ItemRepo;
+import repos.Repository;
+import scriptors.SQLScriptor;
+import utils.FileLogger;
 import utils.GlobalStore;
 
 import java.io.IOException;
@@ -24,13 +28,30 @@ public class DataServlet extends HttpServlet {
         itemRepo = new ItemRepo();
     }
 
-
+    //CHANGE this so it gets objects from the database not locally
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String nameOfThing = " yup ";
         nameOfThing = readURI(req);
         ObjectMapper mapper = new ObjectMapper();
+            //what happened to objectReflectionManager?
+            //can not test anything because I don't have database connection file
 
+        Item item = new Item();
+        String sql="nope";
+        try {
+            sql = SQLScriptor.buildSelectStatement(item);//this should return select item table statemnet
+        } catch (MalformedTableException e) {
+            FileLogger.getFileLogger().log(e);
+        }
+
+        itemRepo.readItem(item);
+        resp.setStatus(202);
+
+        //mapper.readValue(req.getInputStream(),Item.class);
+
+
+        /*
         switch (nameOfThing){
             case "accessory" ://code for accessory
                 Accessory accessory = GlobalStore.getAccessory();
@@ -58,18 +79,19 @@ public class DataServlet extends HttpServlet {
                 break;
             default://code for default
                 resp.setStatus(501);
-                break;
-        }
-    }
+                break;*/
+
+    }//end doGet
 
 
+        //this apparently still works but only with items? or maybe he is just bypassing it entirely???
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String nameOfThing = " yup ";
         nameOfThing = readURI(req);
         ObjectMapper mapper = new ObjectMapper();
-
-        System.out.println(nameOfThing);
+            //CHANGE this so it gets objects from the database not locally
+        //System.out.println(nameOfThing);
 
         switch (nameOfThing){
             case "accessory" ://code for accessory

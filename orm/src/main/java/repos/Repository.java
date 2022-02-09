@@ -1,10 +1,9 @@
 package repos;
 
+import java.awt.event.ItemEvent;
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import annotations.Column;
@@ -95,13 +94,31 @@ public class Repository {
 
 
     //TODO reflective READ statement
-    public List<Object> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
+    public Object read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException, NoSuchMethodException {
         // start the prepared statement
+        System.out.println("this is being run");
+        Object result = new Object();
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildSelectStatement(obj), Statement.RETURN_GENERATED_KEYS);
-        
-        return null;
-    }
+
+        ResultSet rs = pstmt.executeQuery();
+        Field[] fields = rs.getClass().getDeclaredFields();
+
+        String objectName = rs.getClass().getCanonicalName();
+
+        //rs.getClass().getConstructor();
+
+        ArrayList<Object> rows = new ArrayList<Object>();
+        while(rs.next()){
+                for(int i=1;i< fields.length;i++){
+                    rows.add(rs.getObject(i));
+                    System.out.println(rs.getObject(i));
+                }
+        }
+
+
+        return result;
+    }//end read
 
 
     //TODO reflective UPDATE statement

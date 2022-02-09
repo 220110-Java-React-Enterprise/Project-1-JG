@@ -35,23 +35,23 @@ public class ItemRepo {
     }
 
 
-    public List<Item> readItem(Item item) {
+    public Item readItem(Item item) {
         // array list for returning all accessories
         List<Item> itemList = new ArrayList<>();
-
+        Item list=null;
         try {
             // list of objects received from repo's generic read
-            List<Object> list = repo.read(item);
+            list = (Item)repo.read(item);
 
             // cast each generic object into an item
-            for (Object o : list) {
-                itemList.add((Item) o);
-            }
-        } catch (SQLException | ConnectionException | MalformedTableException | IllegalAccessException e) {
+           // for (Object o : list) {
+             //   itemList.add((Item) o);
+           // }
+        } catch (SQLException | ConnectionException | MalformedTableException | IllegalAccessException | NoSuchMethodException e) {
             FileLogger.getFileLogger().log(e);
         }
 
-        return itemList;
+        return list;
     }
 
 
