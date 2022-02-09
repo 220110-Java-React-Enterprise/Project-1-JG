@@ -47,7 +47,7 @@ public class ConnectionManager {
         } catch (SQLException e) {
             throw new SQLException("Database connection unsuccessful! Either the database does not exist, or the connection failed.");
         } catch (ClassNotFoundException e) {
-            FileLogger.getFileLogger().log(e);
+            // do nothing, we really just don't care
         }
     }
 }
