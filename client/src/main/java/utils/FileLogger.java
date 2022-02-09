@@ -12,7 +12,9 @@ public class FileLogger {
 
 
     private FileLogger() {
-        filePath = "logs/";
+        //TODO figure out where this is supposed to go
+        //filePath = "logs/";
+        filePath = "C:/p1_logs/";
         stackTraceSize = 10;
     }
 
