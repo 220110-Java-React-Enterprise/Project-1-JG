@@ -12,8 +12,8 @@ public class Accessory extends Item {
     public Accessory() {
     }
 
-    public Accessory(String name,Boolean inStock,Double price, String platform, String description) {
-        super(name, inStock, price, platform);
+    public Accessory(Integer id, String name,Boolean inStock,Double price, String platform, String description) {
+        super(id, name, inStock, price, platform);
         this.description = description;
     }
 

@@ -1,6 +1,7 @@
 package servlets;
 
 import pojos.*;
+import repos.ItemRepo;
 import utils.GlobalStore;
 
 import java.io.IOException;
@@ -12,8 +13,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 @WebServlet("/*")
 public class DataServlet extends HttpServlet {
+    private ItemRepo itemRepo;
+    
+    @Override
+    public void init() {
+        // new repo
+        itemRepo = new ItemRepo();
+    }
+
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String nameOfThing = " yup ";
@@ -22,9 +33,8 @@ public class DataServlet extends HttpServlet {
 
         switch (nameOfThing){
             case "accessory" ://code for accessory
-                //Accessory payload = mapper.readValue(req.getInputStream(), Accessory.class);
-                Accessory acc = GlobalStore.getAccessory();
-                String JSONaccessory = mapper.writeValueAsString(acc);
+                Accessory accessory = GlobalStore.getAccessory();
+                String JSONaccessory = mapper.writeValueAsString(accessory);
                 resp.getWriter().print(JSONaccessory);
                 resp.setStatus(202);
                 break;
@@ -38,7 +48,6 @@ public class DataServlet extends HttpServlet {
                 Controller cont = GlobalStore.getController();
                 String JSONcontroller = mapper.writeValueAsString(cont);
                 resp.getWriter().print(JSONcontroller);
-
                 resp.setStatus(202);
                 break;
             case "game" ://code for game
@@ -51,12 +60,6 @@ public class DataServlet extends HttpServlet {
                 resp.setStatus(501);
                 break;
         }
-        /*
-        DataObject obj = GlobalStore.getDataObject();
-        String JSON = mapper.writeValueAsString(obj);
-        resp.getWriter().print(JSON);
-        resp.setStatus(200);
-    */
     }
 
 
@@ -76,7 +79,6 @@ public class DataServlet extends HttpServlet {
                 break;
             case "console" ://code for console
                 Console payloadConsole = mapper.readValue(req.getInputStream(), Console.class);
-
                 GlobalStore.setConsole(payloadConsole);
                 resp.setStatus(202);
                 break;
@@ -90,23 +92,35 @@ public class DataServlet extends HttpServlet {
                 GlobalStore.setGame(payloadGame);
                 resp.setStatus(202);
                 break;
+            case "item":
+                Item payloadItem = mapper.readValue(req.getInputStream(), Item.class);
+                itemRepo.createItem(payloadItem);
+                resp.setStatus(202);
+                break;
             default://code for default
                 resp.setStatus(501);
                 break;
         }
-
-        //DataObject payload = mapper.readValue(req.getInputStream(), DataObject.class);
-        //GlobalStore.setDataObject(payload);
-
     }
+
+
+    //TODO implement this
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        
+    }
+
+
+    //TODO implement this
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        
+    }
+
+
     private String readURI(HttpServletRequest req){
         String temp = req.getRequestURI();
         String[] uri = temp.split("/");
         return uri[uri.length-1];
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
     }
 }

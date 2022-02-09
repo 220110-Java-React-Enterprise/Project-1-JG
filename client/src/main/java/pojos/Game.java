@@ -18,8 +18,8 @@ public class Game extends Item {
     @Column(type = SQLType.INT)
     private Integer year;
 
-    public Game(String name, Boolean inStock, Double price, String platform, String genre, String developer, String publisher, Integer year) {
-        super(name, inStock, price, platform);
+    public Game(Integer id, String name, Boolean inStock, Double price, String platform, String genre, String developer, String publisher, Integer year) {
+        super(id, name, inStock, price, platform);
         this.genre = genre;
         this.developer = developer;
         this.publisher = publisher;

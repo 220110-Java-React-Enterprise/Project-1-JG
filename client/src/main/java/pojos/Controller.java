@@ -12,8 +12,8 @@ public class Controller extends Item {
     @Column(type = SQLType.INT)
     private Integer numberOfButtons;
 
-    public Controller(String name, Boolean inStock, Double price, String platform, String maker, Integer numberOfButtons) {
-        super(name, inStock, price, platform);
+    public Controller(Integer id, String name, Boolean inStock, Double price, String platform, String maker, Integer numberOfButtons) {
+        super(id, name, inStock, price, platform);
         this.maker = maker;
         this.numberOfButtons = numberOfButtons;
     }

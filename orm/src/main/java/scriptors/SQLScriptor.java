@@ -120,6 +120,7 @@ public abstract class SQLScriptor {
         
         String tableName = obj.getClass().getAnnotation(Table.class).tableName();
 
+        //TODO fix this
         String result = "DELETE FROM " + tableName + " WHERE " + tableName + "_id = ?";
 
         return result;
