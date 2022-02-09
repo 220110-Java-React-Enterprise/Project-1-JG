@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import exceptions.ConnectionException;
+
 public class ConnectionManager {
     private static Connection connection;
 
@@ -17,11 +19,11 @@ public class ConnectionManager {
     /**
      * Get the connection manager if it exists.
      * @return the Connection object
-     * @throws IllegalStateException when the 
+     * @throws ConnectionException when the 
      */
-    public static Connection getConnection() throws IllegalStateException {
+    public static Connection getConnection() throws ConnectionException {
         if (connection == null) {
-            throw new IllegalStateException("You must connect to the database first!");
+            throw new ConnectionException("You must connect to the database first!");
         }
 
         return connection;
