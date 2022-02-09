@@ -56,9 +56,6 @@ public abstract class SQLScriptor {
                 result += nameCleaner(fields[i].toString()) + ")";
             }
 
-        // now we have our script and just need to build it:
-        String script = firstPart + tablename + nextPart + filterColumn + parameterList;
-
             // set fields back to inaccessible
             fields[i].setAccessible(false);
         }
@@ -74,13 +71,6 @@ public abstract class SQLScriptor {
      * @return SQL statement for inserting an object
      * @throws MalformedTableException if the @Table and any @Column annotations are missing
      */
-<<<<<<< HEAD
-    public static String buildInsertStatement(Object obj){
-        String result = "";
-        return result;
-    }
-    
-=======
     // INSERT INTO ___ (field1, field2, ...) VALUES (?,?,...)
     public static String buildInsertStatement(Object obj) throws MalformedTableException {
         if (!obj.getClass().isAnnotationPresent(Table.class)) {
@@ -116,63 +106,18 @@ public abstract class SQLScriptor {
 
 
 
->>>>>>> 150caa21d7443aec2e0fec48d359b1ac0a373ece
     /**
      * Creates the SQL statement to delete an object from the table.
      * @param obj object to reflect upon
      * @return SQL statement for deleting an object
      * @throws MalformedTableException if the @Table annotation is missing
      */
-<<<<<<< HEAD
-    public static String buildDeleteStatement(Object obj) throws MalformedTableException {
-        // check if the @Table annotation is NOT present
-        if (!obj.getClass().isAnnotationPresent(Table.class)) {
-            throw new MalformedTableException("Missing @Table annotation.");
-        }
-
-        // start the statement
-        String result = "DELETE TABLE IF NOT EXISTS ";
-
-        // retrieve the name of the table, specified in the @Table annotation on the object
-        String tableName = obj.getClass().getAnnotation(Table.class).tableName();
-
-        // add the table name to the result string
-        result += tableName + " (";
-
-        // retrieve the fields available to the class
-        Field[] fields = obj.getClass().getDeclaredFields();
-
-        // iterate through the fields
-        for (int i = 0 ; i < fields.length ; i++) {
-            //TODO need to check for @Column and add its stuff if appropriate (VARCHAR, length, etc.)
-
-            // fields set to be accessible temporarily
-            fields[i].setAccessible(true);
-
-            // add each field to the result string, comma-separated
-            if (i < fields.length - 1) {
-                result += nameCleaner(fields[i].toString()) + ", ";
-            }
-            // finish with a )
-            else {
-                result += nameCleaner(fields[i].toString()) + ")";
-            }
-
-            // now we have our script and just need to build it:
-            String script = firstPart + tablename + nextPart + filterColumn + parameterList;
-
-            // set fields back to inaccessible
-            fields[i].setAccessible(false);
-        }
-
-        // return string ready for PreparedStatement
-=======
     // DELETE FROM ___ WHERE tableName_id = ?
     public static String buildDeleteStatement(Object obj) throws MalformedTableException {
         if (!obj.getClass().isAnnotationPresent(Table.class)) {
             throw new MalformedTableException("Missing @Table annotation for " + obj.getClass().getSimpleName() + ".");
         }
-        
+
         String tableName = obj.getClass().getAnnotation(Table.class).tableName();
 
         //TODO fix this
@@ -212,9 +157,9 @@ public abstract class SQLScriptor {
 
         //TODO implement update's loop logic, should be similar to buildInsertStatement()
 
->>>>>>> 150caa21d7443aec2e0fec48d359b1ac0a373ece
         return result;
     }
+
 
     /**
      * Helper function that retrieves the last name from a reflection'd string.

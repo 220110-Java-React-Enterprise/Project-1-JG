@@ -46,7 +46,7 @@ public class Repository {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildInsertStatement(obj), Statement.RETURN_GENERATED_KEYS);
-        
+
         // retrieve all fields and iterate through them
         Field[] fields = obj.getClass().getDeclaredFields();
 
@@ -63,22 +63,22 @@ public class Repository {
                 case VARCHAR:
                     pstmt.setString(i + 1, (String)fields[i].get(obj));
                     break;
-                
+
                 // INT -> Integer
                 case INT:
                     pstmt.setInt(i + 1, (Integer)fields[i].get(obj));
                     break;
-                
+
                 // NUMERIC -> Double
                 case NUMERIC:
                     pstmt.setDouble(i + 1, (Double)fields[i].get(obj));
                     break;
-            
+
                 // INT -> Integer
                 case BOOL:
                     pstmt.setBoolean(i + 1, (Boolean)fields[i].get(obj));
                     break;
-        
+
                 // INT -> Integer
                 case BIGINT:
                     pstmt.setLong(i + 1, (Long)fields[i].get(obj));
@@ -99,7 +99,7 @@ public class Repository {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildSelectStatement(obj), Statement.RETURN_GENERATED_KEYS);
-        
+
         return null;
     }
 
