@@ -1,7 +1,0 @@
-2022-02-08 16:42:19 - This is our message!
-2022-02-08 16:42:19 - Three methods deep
-	Driver.methodThree(Driver.java:23)
-	Driver.methodTwo(Driver.java:19)
-	Driver.methodOne(Driver.java:15)
-	Driver.main(Driver.java:11)
-
