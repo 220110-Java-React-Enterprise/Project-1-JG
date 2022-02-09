@@ -12,8 +12,8 @@ public class Console extends Item {
     @Column(type = SQLType.VARCHAR)
     private String model;
 
-    public Console(String name, Boolean inStock, Double price, String platform, String company, String model) {
-        super(name, inStock, price, platform);
+    public Console(Integer id, String name, Boolean inStock, Double price, String platform, String company, String model) {
+        super(id, name, inStock, price, platform);
         this.company = company;
         this.model = model;
     }
