@@ -4,12 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import exceptions.ConnectionException;
 import exceptions.MalformedTableException;
 import scriptors.SQLScriptor;
 import utils.ConnectionManager;
-import utils.FileLogger;
 
 /**
  * This is what the client uses to to do the CRUD operations.
@@ -19,14 +19,11 @@ public class Repository {
     /**
      * Start the connection with the database when given a connectionString.
      * @param connectionString string for connecting to database
+     * @throws SQLException when the
      */
-    public void startConnection(String connectionString) {
-        // see if the database is already connected
-        try {
-            ConnectionManager.connect(connectionString);
-        } catch (SQLException e) {
-            FileLogger.getFileLogger().log(e);
-        }
+    public void startConnection(String connectionString) throws SQLException {
+        // try to connect to the database given a connectionString
+        ConnectionManager.connect(connectionString);
     }
 
 
@@ -35,16 +32,8 @@ public class Repository {
      * @return if successful, returns an initialized Connection object;
      *         otherwise, returns a null Connection object
      */
-    public Connection getConnection() {
-        Connection conn = null;
-
-        try {
-            conn = ConnectionManager.getConnection();
-        } catch (ConnectionException e) {
-            FileLogger.getFileLogger().log(e);
-        }
-
-        return conn;
+    public Connection getConnection() throws ConnectionException {
+        return ConnectionManager.getConnection();
     }
 
 
@@ -59,10 +48,12 @@ public class Repository {
 
 
     //TODO reflective READ statement
-    public void read(Object obj) throws SQLException, ConnectionException, MalformedTableException  {
+    public List<Object> read(Object obj) throws SQLException, ConnectionException, MalformedTableException  {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildSelectStatement(obj), Statement.RETURN_GENERATED_KEYS);
+        
+        return null;
     }
 
 
