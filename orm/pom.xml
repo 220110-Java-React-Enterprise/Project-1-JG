@@ -34,7 +34,6 @@
             <scope>test</scope>
         </dependency>
 
-<<<<<<< HEAD
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -43,8 +42,6 @@
             <scope>test</scope>
         </dependency>
 
-=======
->>>>>>> 8abef884c2b9509de773dcbcb8cd56d997fb96e9
     </dependencies>
 
 </project>
