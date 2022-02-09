@@ -38,11 +38,16 @@ public class ConnectionManager {
      */
     public static void connect(String connectionString) throws SQLException {
         try {
+            // make sure the driver is loaded or something
+            Class.forName("org.mariadb.jdbc.Driver");
+            
             // make connection given connectionString
             connection = DriverManager.getConnection(connectionString);
 
         } catch (SQLException e) {
             throw new SQLException("Database connection unsuccessful! Either the database does not exist, or the connection failed.");
+        } catch (ClassNotFoundException e) {
+            FileLogger.getFileLogger().log(e);
         }
     }
 }
