@@ -71,7 +71,7 @@ public abstract class SQLScriptor {
      * @return SQL statement for inserting an object
      * @throws MalformedTableException if the @Table and any @Column annotations are missing
      */
-    // INSERT INTO ___ (field1, field2, ...) VALUES (?,?,...)
+    // INSERT INTO __TABLE__ (field1, field2, ...) VALUES (?,?,...)
     public static String buildInsertStatement(Object obj) throws MalformedTableException {
         if (!obj.getClass().isAnnotationPresent(Table.class)) {
             throw new MalformedTableException("Missing @Table annotation for " + obj.getClass().getSimpleName() + ".");
@@ -107,22 +107,55 @@ public abstract class SQLScriptor {
 
 
     /**
-     * Creates the SQL statement to delete an object from the table.
+     * Creates the SQL statement to delete an object from the table given id of the object.
      * @param obj object to reflect upon
      * @return SQL statement for deleting an object
      * @throws MalformedTableException if the @Table annotation is missing
      */
-    // DELETE FROM ___ WHERE tableName_id = ?
+    // DELETE FROM __TABLE__ WHERE __PK__ = ?
     public static String buildDeleteStatement(Object obj) throws MalformedTableException {
+        // make sure @Table annotation is present
         if (!obj.getClass().isAnnotationPresent(Table.class)) {
             throw new MalformedTableException("Missing @Table annotation for " + obj.getClass().getSimpleName() + ".");
         }
         
+        // table name
         String tableName = obj.getClass().getAnnotation(Table.class).tableName();
 
-        //TODO fix this
-        String result = "DELETE FROM " + tableName + " WHERE " + tableName + "_id = ?";
+        // start of SQL striing
+        String result = "DELETE FROM " + tableName + " WHERE ";
 
+        // primary key placeholder
+        String primaryKeyName = null;
+
+        // iterate through fields
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            // make sure @Column annotation is present
+            if (!field.isAnnotationPresent(Column.class)) {
+                throw new MalformedTableException("Missing @Column annotation for " + field.getName() + ".");
+            }
+
+            // if the field is a primary key
+            if (field.getAnnotation(Column.class).primaryKey()) {
+                // make field accessible temporarily
+                field.setAccessible(true);
+
+                // get the name of the primary key column
+                primaryKeyName = field.getName();
+
+                // make field inaccessible again
+                field.setAccessible(false);
+
+                // exit loop early, already found primary key
+                break;
+            }
+        }
+
+        // finish SQL string
+        result += primaryKeyName + " = ?";
+
+        // return SQL string
         return result;
     }
 
@@ -133,8 +166,13 @@ public abstract class SQLScriptor {
      * @return SQL statement for selecting all objects of a given type from the object's associated table
      * @throws MalformedTableException if the @Table annotation is missing
      */
-    // SELECT * FROM ___
+    // SELECT * FROM __TABLE__
     public static String buildSelectStatement(Object obj) throws MalformedTableException {
+        // make sure @Table annotation is present
+        if (!obj.getClass().isAnnotationPresent(Table.class)) {
+            throw new MalformedTableException("Missing @Table annotation for " + obj.getClass().getSimpleName() + ".");
+        }
+
         String tableName = obj.getClass().getAnnotation(Table.class).tableName();
 
         String result = "SELECT * FROM " + tableName;
@@ -149,13 +187,46 @@ public abstract class SQLScriptor {
      * @return SQL statment for updating a given object
      * @throws MalformedTableException if the @Table and any @Column annotations are missing
      */
-    // UPDATE ___ SET field1 = ?, field2 = ?, ... WHERE tableName_id = ?
+    // UPDATE __TABLE__ SET field1 = ?, field2 = ?, ... WHERE __PK__ = ?
     public static String buildUpdateStatement(Object obj) throws MalformedTableException {
+        // make sure @Table annotation is present
+        if (!obj.getClass().isAnnotationPresent(Table.class)) {
+            throw new MalformedTableException("Missing @Table annotation for " + obj.getClass().getSimpleName() + ".");
+        }
+
+        // retrieve the table name
         String tableName = obj.getClass().getAnnotation(Table.class).tableName();
 
+        // start resulting SQL string
         String result = "UPDATE " + tableName + " SET ";
 
-        //TODO implement update's loop logic, should be similar to buildInsertStatement()
+        // iterate through fields
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (int i = 0 ; i < fields.length ; i++) {
+            // make sure the @Column annotation is present
+            if (!fields[i].isAnnotationPresent(Column.class)){
+                throw new MalformedTableException("Missing @Column annotation for " + fields[i].getName() + ".");
+            }
+
+            // set the fields to be accessible temporarily
+            fields[i].setAccessible(true);
+
+            if (i < fields.length - 1) {
+                result += nameCleaner(fields[i].toString()) + ", ";
+            }
+            else {
+                result += nameCleaner(fields[i].toString()) + ")";
+            }
+
+            // revoke field accessibility
+            fields[i].setAccessible(false);
+        }
+        result += " VALUES (";
+        for (int i=0;i<fields.length;i++)
+            if (i < fields.length - 1)
+                result +="?,";
+            else
+                result += "?)";
 
         return result;
     }
