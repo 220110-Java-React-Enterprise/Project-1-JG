@@ -185,25 +185,6 @@ public abstract class SQLScriptor {
         // return SQL string
         return result;
     }
-    public static String buildSelectByIdStatement(Object obj) throws MalformedTableException {
-        if (!obj.getClass().isAnnotationPresent(Table.class)) {
-            throw new MalformedTableException("Missing @Table annotation for " + obj.getClass().getSimpleName() + ".");
-        }
-        String tableName = obj.getClass().getAnnotation(Table.class).tableName();
-        Field[] fields = obj.getClass().getDeclaredFields();
-        String primaryKey = "";
-        for(int i=0;i<fields.length;i++){
-            if(fields[i].isAnnotationPresent(Column.class)){
-                if(fields[i].getAnnotation(Column.class).primaryKey()) {
-                    primaryKey = fields[i].getName();
-                    break;
-                }
-            }
-        }
-        String result = "SELECT * FROM " + tableName+" WHERE "+primaryKey+" = ?";
-
-        return result;
-    }
 
 
     /**
