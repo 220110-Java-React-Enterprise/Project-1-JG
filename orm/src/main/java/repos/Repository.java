@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
 import annotations.Column;
 import enums.SQLType;
@@ -95,12 +94,14 @@ public class Repository {
 
 
     //TODO reflective READ statement
-    public List<Object> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
+    public Object read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildSelectStatement(obj), Statement.RETURN_GENERATED_KEYS);
+
+        Object newObj = new Object();
         
-        return null;
+        return newObj;
     }
 
 
