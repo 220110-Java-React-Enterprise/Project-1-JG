@@ -39,10 +39,11 @@ public class DataServlet extends HttpServlet {
 
             switch (nameOfThing){
                 case "item"://code for item
-                    Item item = new Item();
+                    Item item = itemRepo.readItem(new Item());
                     String JSONitem = mapper.writeValueAsString(item);
                     resp.getWriter().print(JSONitem);
-                    resp.setStatus(202);
+                    resp.setStatus(200);
+                    break;
                 default://code for default
                     resp.setStatus(501);
                     break;
@@ -71,8 +72,8 @@ public class DataServlet extends HttpServlet {
             switch (nameOfThing){
                 case "item":
                     Item payloadItem = mapper.readValue(req.getInputStream(), Item.class);
-                    itemRepo.createItem(payloadItem);
-                    resp.setStatus(202);
+                    itemRepo.updateItem(payloadItem);
+                    resp.setStatus(200);
                     break;
                 default://code for default
                     resp.setStatus(501);
@@ -90,11 +91,34 @@ public class DataServlet extends HttpServlet {
      * @param req   request body
      * @param resp  response body
      */
-    //TODO implement this
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
         try {
+            // retrieve the context name from the URI
+            String contextName = readURI(req);
 
+            // create object mapper
+            ObjectMapper mapper = new ObjectMapper();
+
+            switch (contextName){
+                // if the context refers to an item
+                case "item":
+                    // create the payload
+                    Item payloadItem = mapper.readValue(req.getInputStream(), Item.class);
+
+                    // call delete via the respective repo
+                    itemRepo.deleteItem(payloadItem);
+
+                    // make sure the status is OK
+                    resp.setStatus(200);
+
+                    break;
+
+                // if the context reference is not implemented
+                default:
+                    resp.setStatus(501);
+                    break;
+            }
         } catch (Exception e) {
             FileLogger.getFileLogger().log(e);
             resp.setStatus(500);
@@ -107,11 +131,34 @@ public class DataServlet extends HttpServlet {
      * @param req   request body
      * @param resp  response body
      */
-    //TODO implement this
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
         try {
+            // retrieve the context name from the URI
+            String contextName = readURI(req);
 
+            // create object mapper
+            ObjectMapper mapper = new ObjectMapper();
+
+            switch (contextName){
+                // if the context refers to an item
+                case "item":
+                    // create the payload
+                    Item payloadItem = mapper.readValue(req.getInputStream(), Item.class);
+
+                    // call delete via the respective repo
+                    itemRepo.updateItem(payloadItem);
+
+                    // make sure the status is OK
+                    resp.setStatus(200);
+                    
+                    break;
+
+                // if the context reference is not implemented
+                default:
+                    resp.setStatus(501);
+                    break;
+            }
         } catch (Exception e) {
             FileLogger.getFileLogger().log(e);
             resp.setStatus(500);
