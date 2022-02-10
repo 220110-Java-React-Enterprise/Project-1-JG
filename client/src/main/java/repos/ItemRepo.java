@@ -46,7 +46,6 @@ public class ItemRepo {
         List<String> itemList = new ArrayList<>();
         ArrayList<Item> myItemsArr = new ArrayList<>();
         int counter = 0;//used for counting when to cut off each item
-        int index =0;//used for the myitems array to know when to start making the next item
         Item itm = new Item();//the tempory item that will be fed into the myitems array
         try {
             itemList = repo.read(item);//runs the read method in the orm
@@ -78,9 +77,7 @@ public class ItemRepo {
                         case 4:
                             tempPlatform = itemList.get(i).toString();
                             itm.setPlatform(itemList.get(i).toString());//platform
-                            //myItems[index] = new Item(tempId,tempName,tempInStock,tempPrice,tempPlatform,tempDescription);//makes our item and feeds it to myitems array
                             myItemsArr.add(new Item(tempId,tempName,tempInStock,tempPrice,tempPlatform,tempDescription));
-                            index++;//resets variables
                             counter=0;
                             break;
                         default:
