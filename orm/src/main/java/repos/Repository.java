@@ -96,11 +96,22 @@ public class Repository {
 
     //TODO reflective READ statement
     public List<Object> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
-        // start the prepared statement
-        PreparedStatement pstmt = ConnectionManager.getConnection().
-            prepareStatement(SQLScriptor.buildSelectStatement(obj), Statement.RETURN_GENERATED_KEYS);
+        Repository repo = new Repository();
+        String httpFindId = " WHERE id = ?";
+        String sql = SQLScriptor.buildSelectStatement(obj) + httpFindId;
+        PreparedStatement pstmt = ConnectionManager.getConnection().prepareStatement(sql);
+        results rs = pstmt.executeQuery();
 
-        return null;
+        return read(repo);
+
+//        pstmt.getId(id);
+//        return read(obj);
+
+
+
+
+
+
     }
 
 
