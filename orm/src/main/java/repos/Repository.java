@@ -138,11 +138,55 @@ public class Repository {
      * @throws MalformedTableException if the annotations were not done properly
      * @throws IllegalAccessException accessing something that shouldn't be accessed
      */
-    //TODO reflective UPDATE statement
     public void update(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildUpdateStatement(obj), Statement.RETURN_GENERATED_KEYS);
+        
+        // retrieve all fields and iterate through them
+        Field[] fields = obj.getClass().getDeclaredFields();
+
+        for (int i = 0; i < fields.length; i++) {
+            // temporarily set fields as accessible
+            fields[i].setAccessible(true);
+
+            // do not need to check for present of Column as associated SQLScriptor method checks
+            SQLType type = fields[i].getAnnotation(Column.class).type();
+
+            // add to prepared statement based on type
+            switch (type) {
+                // VARCHAR -> String
+                case VARCHAR:
+                    pstmt.setString(i + 1, (String)fields[i].get(obj));
+                    break;
+                
+                // INT -> Integer
+                case INT:
+                    pstmt.setInt(i + 1, (Integer)fields[i].get(obj));
+                    break;
+                
+                // NUMERIC -> Double
+                case NUMERIC:
+                    pstmt.setDouble(i + 1, (Double)fields[i].get(obj));
+                    break;
+            
+                // BOOL -> Boolean
+                case BOOL:
+                    pstmt.setBoolean(i + 1, (Boolean)fields[i].get(obj));
+                    break;
+        
+                // BIGINT -> Long
+                case BIGINT:
+                    pstmt.setLong(i + 1, (Long)fields[i].get(obj));
+                    break;
+            }
+
+            // unset fields as accessible
+            fields[i].setAccessible(false);
+        }
+
+        // execute the built prepared statement
+        pstmt.executeUpdate();
     }
 
 
@@ -154,10 +198,29 @@ public class Repository {
      * @throws MalformedTableException if the annotations were not done properly
      * @throws IllegalAccessException accessing something that shouldn't be accessed
      */
-    //TODO reflective DELETE statement
     public void delete(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildDeleteStatement(obj), Statement.RETURN_GENERATED_KEYS);
+        
+        // retrieve all fields
+        Field[] fields = obj.getClass().getDeclaredFields();
+        
+        // look for primary key
+        for (Field field : fields) {
+            if (field.getAnnotation(Column.class).primaryKey()) {
+                // temporarily set accessible
+                field.setAccessible(true);
+
+                // provide the id of object to delete
+                pstmt.setInt(1, (Integer)field.get(obj));
+
+                // unset fields as accessible
+                field.setAccessible(false);
+            }
+        }
+
+        // execute the built prepared statement
+        pstmt.execute();
     }
 }
