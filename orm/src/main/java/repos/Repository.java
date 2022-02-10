@@ -29,7 +29,6 @@ public class Repository {
         ConnectionManager.connect(connectionString);
     }
 
-
     /**
      * Get the connection through the ORM's ConnectionManager.
      * @return if successful, returns an initialized Connection object;
@@ -38,7 +37,6 @@ public class Repository {
     public Connection getConnection() throws ConnectionException {
         return ConnectionManager.getConnection();
     }
-
 
     //TODO this should call buildCreateTableStatement()
     //!     notably we may just not do dynamic tables for timesake
@@ -94,23 +92,12 @@ public class Repository {
     }
 
 
-    //TODO reflective READ statement
-    public List<Object> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
-        Repository repo = new Repository();
-        String httpFindId = " WHERE id = ?";
-        String sql = SQLScriptor.buildSelectStatement(obj) + httpFindId;
-        PreparedStatement pstmt = ConnectionManager.getConnection().prepareStatement(sql);
-        results rs = pstmt.executeQuery();
-
-        // retrieve all fields and iterate through them
-        Field[] fields = obj.getClass().getDeclaredFields();
-
-        for (int i = 0; i < fields.length; i++) {
-            // temporarily set fields as accessible
-            fields[i].setAccessible(true);
-
-        return read(pstmt);
-    }
+//    //TODO reflective READ statement
+//    public List<Object> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
+//        // start the prepared statement
+//        PreparedStatement pstmt = ConnectionManager.getConnection().
+//                prepareStatement(SQLScriptor.buildUpdateStatement(obj), Statement.RETURN_GENERATED_KEYS);
+//    }
 
 
     //TODO reflective UPDATE statement
