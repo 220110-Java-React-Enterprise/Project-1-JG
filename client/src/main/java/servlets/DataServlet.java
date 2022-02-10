@@ -69,12 +69,10 @@ public class DataServlet extends HttpServlet {
             nameOfThing = readURI(req);
             ObjectMapper mapper = new ObjectMapper();
 
-            System.out.println(nameOfThing);
-
             switch (nameOfThing){
                 case "item":
                     Item payloadItem = mapper.readValue(req.getInputStream(), Item.class);
-                    itemRepo.updateItem(payloadItem);
+                    itemRepo.createItem(payloadItem);
                     resp.setStatus(200);
                     break;
                 default://code for default
