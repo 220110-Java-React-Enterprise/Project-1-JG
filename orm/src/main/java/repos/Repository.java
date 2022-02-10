@@ -146,7 +146,7 @@ public class Repository {
         // retrieve all fields and iterate through them
         Field[] fields = obj.getClass().getDeclaredFields();
 
-        for (int i = 0; i < fields.length; i++) {
+        for (int i = 1; i < fields.length; i++) {
             // temporarily set fields as accessible
             fields[i].setAccessible(true);
 
@@ -157,33 +157,38 @@ public class Repository {
             switch (type) {
                 // VARCHAR -> String
                 case VARCHAR:
-                    pstmt.setString(i + 1, (String)fields[i].get(obj));
+                    pstmt.setString(i, (String)fields[i].get(obj));
                     break;
                 
                 // INT -> Integer
                 case INT:
-                    pstmt.setInt(i + 1, (Integer)fields[i].get(obj));
+                    pstmt.setInt(i, (Integer)fields[i].get(obj));
                     break;
                 
                 // NUMERIC -> Double
                 case NUMERIC:
-                    pstmt.setDouble(i + 1, (Double)fields[i].get(obj));
+                    pstmt.setDouble(i, (Double)fields[i].get(obj));
                     break;
             
                 // BOOL -> Boolean
                 case BOOL:
-                    pstmt.setBoolean(i + 1, (Boolean)fields[i].get(obj));
+                    pstmt.setBoolean(i, (Boolean)fields[i].get(obj));
                     break;
         
                 // BIGINT -> Long
                 case BIGINT:
-                    pstmt.setLong(i + 1, (Long)fields[i].get(obj));
+                    pstmt.setLong(i, (Long)fields[i].get(obj));
                     break;
             }
 
             // unset fields as accessible
             fields[i].setAccessible(false);
         }
+
+        // set id since it is last and separate
+        fields[0].setAccessible(true);
+        pstmt.setInt(fields.length, (Integer)fields[0].get(obj));
+        fields[0].setAccessible(false);
 
         // execute the built prepared statement
         pstmt.executeUpdate();
