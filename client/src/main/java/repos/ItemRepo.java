@@ -42,6 +42,11 @@ public class ItemRepo {
     }
 
 
+    /**
+     * Reads all items from the associated table.
+     * @param item type of object to be read
+     * @return item array
+     */
     public Item[] readAllItems(Item item) {
         List<String> itemList = new ArrayList<>();
         ArrayList<Item> myItemsArr = new ArrayList<>();
