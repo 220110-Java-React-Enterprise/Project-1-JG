@@ -142,7 +142,7 @@ public abstract class SQLScriptor {
                 field.setAccessible(true);
 
                 // get the name of the primary key column
-                primaryKeyName = field.getName();
+                primaryKeyName = nameCleaner(field.toString());
 
                 // make field inaccessible again
                 field.setAccessible(false);
@@ -150,6 +150,11 @@ public abstract class SQLScriptor {
                 // exit loop early, already found primary key
                 break;
             }
+        }
+
+        // throw exception if there was no primary key
+        if (primaryKeyName == null) {
+            throw new MalformedTableException("Missing primary key for the " + tableName + " table.");
         }
 
         // finish SQL string
@@ -173,10 +178,13 @@ public abstract class SQLScriptor {
             throw new MalformedTableException("Missing @Table annotation for " + obj.getClass().getSimpleName() + ".");
         }
 
+        // retrieve the table name
         String tableName = obj.getClass().getAnnotation(Table.class).tableName();
 
+        // create SQL string
         String result = "SELECT * FROM " + tableName;
 
+        // return SQL string
         return result;
     }
 
@@ -200,6 +208,9 @@ public abstract class SQLScriptor {
         // start resulting SQL string
         String result = "UPDATE " + tableName + " SET ";
 
+        // name of primary key
+        String primaryKeyName = null;
+
         // iterate through fields
         Field[] fields = obj.getClass().getDeclaredFields();
         for (int i = 0 ; i < fields.length ; i++) {
@@ -208,26 +219,36 @@ public abstract class SQLScriptor {
                 throw new MalformedTableException("Missing @Column annotation for " + fields[i].getName() + ".");
             }
 
+            // store primary key name separately and skip to next iteration
+            if (fields[i].getAnnotation(Column.class).primaryKey()) {
+                primaryKeyName = nameCleaner(fields[i].toString());
+                continue;
+            }
+
             // set the fields to be accessible temporarily
             fields[i].setAccessible(true);
 
+            // add the applicable fields to the result string
             if (i < fields.length - 1) {
-                result += nameCleaner(fields[i].toString()) + ", ";
+                result += nameCleaner(fields[i].toString()) + " = ?, ";
             }
             else {
-                result += nameCleaner(fields[i].toString()) + ")";
+                result += nameCleaner(fields[i].toString()) + " = ?";
             }
 
             // revoke field accessibility
             fields[i].setAccessible(false);
         }
-        result += " VALUES (";
-        for (int i=0;i<fields.length;i++)
-            if (i < fields.length - 1)
-                result +="?,";
-            else
-                result += "?)";
 
+        // throw exception if there was no primary key
+        if (primaryKeyName == null) {
+            throw new MalformedTableException("Missing primary key for the " + tableName + " table.");
+        }
+
+        // finish SQL string
+        result += " WHERE " + primaryKeyName + " = ?";
+
+        // return SQL string
         return result;
     }
 
