@@ -89,7 +89,7 @@ public class ItemRepo {
                             break;
                     }
                 }
-        } catch (SQLException | ConnectionException | MalformedTableException | IllegalAccessException | NoSuchMethodException e) {
+        } catch (SQLException | ConnectionException | MalformedTableException | IllegalAccessException e) {
             FileLogger.getFileLogger().log(e);
         }
         Item[] myItems = new Item[myItemsArr.size()];//user defined arraysize, the rest will be filled with null values

@@ -23,7 +23,7 @@ public class Repository {
     /**
      * Start the connection with the database when given a connectionString.
      * @param connectionString string for connecting to database
-     * @throws SQLException when the
+     * @throws SQLException if the database connection is unsuccessful
      */
     public void startConnection(String connectionString) throws SQLException {
         // try to connect to the database given a connectionString
@@ -33,16 +33,22 @@ public class Repository {
 
     /**
      * Get the connection through the ORM's ConnectionManager.
-     * @return if successful, returns an initialized Connection object;
-     *         otherwise, returns a null Connection object
+     * @return if successful, returns an initialized Connection object
+     * @throws ConnectionException if the connection is not yet established
      */
     public Connection getConnection() throws ConnectionException {
         return ConnectionManager.getConnection();
     }
 
 
-    //TODO this should call buildCreateTableStatement()
-    //!     notably we may just not do dynamic tables for timesake
+    /**
+     * Add an object to the database.
+     * @param obj object to add to database
+     * @throws SQLException if the database connection is unsuccessful
+     * @throws ConnectionException if the connection is not yet established
+     * @throws MalformedTableException if the annotations were not done properly
+     * @throws IllegalAccessException accessing something that shouldn't be accessed
+     */
     public void create(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
@@ -95,8 +101,15 @@ public class Repository {
     }
 
 
-    //TODO reflective READ statement
-    public ArrayList<String> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException, NoSuchMethodException {
+    /**
+     * Reads all objects from the database.
+     * @param obj type of object to read
+     * @throws SQLException if the database connection is unsuccessful
+     * @throws ConnectionException if the connection is not yet established
+     * @throws MalformedTableException if the annotations were not done properly
+     * @throws IllegalAccessException accessing something that shouldn't be accessed
+     */
+    public ArrayList<String> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildSelectStatement(obj), Statement.RETURN_GENERATED_KEYS);
@@ -117,6 +130,14 @@ public class Repository {
     }//end read
 
 
+    /**
+     * Updates an object in the database.
+     * @param obj what object to update
+     * @throws SQLException if the database connection is unsuccessful
+     * @throws ConnectionException if the connection is not yet established
+     * @throws MalformedTableException if the annotations were not done properly
+     * @throws IllegalAccessException accessing something that shouldn't be accessed
+     */
     //TODO reflective UPDATE statement
     public void update(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
@@ -125,6 +146,14 @@ public class Repository {
     }
 
 
+    /**
+     * Deletes an object from the database.
+     * @param obj what object to delete
+     * @throws SQLException if the database connection is unsuccessful
+     * @throws ConnectionException if the connection is not yet established
+     * @throws MalformedTableException if the annotations were not done properly
+     * @throws IllegalAccessException accessing something that shouldn't be accessed
+     */
     //TODO reflective DELETE statement
     public void delete(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
