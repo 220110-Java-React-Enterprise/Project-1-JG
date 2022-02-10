@@ -1,8 +1,6 @@
 package repos;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import exceptions.ConnectionException;
 import exceptions.MalformedTableException;
@@ -48,23 +46,18 @@ public class ItemRepo {
      * @return
      * TODO update this javadoc to match new readItem()
      */
-    public List<Item> readItem(Item item) {
+    public Item readItem(Item item) {
         // array list for returning all accessories
-        List<Item> itemList = new ArrayList<>();
+        Item newItem = new Item();
 
         try {
             // list of objects received from repo's generic read
-            List<Object> list = repo.read(item);
-
-            // cast each generic object into an item
-            for (Object o : list) {
-                itemList.add((Item) o);
-            }
+            newItem = (Item)repo.read(item);
         } catch (SQLException | ConnectionException | MalformedTableException | IllegalAccessException e) {
             FileLogger.getFileLogger().log(e);
         }
 
-        return itemList;
+        return newItem;
     }
 
 
