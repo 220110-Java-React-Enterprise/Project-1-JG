@@ -94,30 +94,24 @@ public class Repository {
 
 
     //TODO reflective READ statement
-    public Object read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException, NoSuchMethodException {
+    public ArrayList<String> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException, NoSuchMethodException {
         // start the prepared statement
-        System.out.println("this is being run");
-        Object result = new Object();
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildSelectStatement(obj), Statement.RETURN_GENERATED_KEYS);
 
+        //gets the output of the SQL query
         ResultSet rs = pstmt.executeQuery();
+        //puts them into a field array
         Field[] fields = rs.getClass().getDeclaredFields();
 
-        String objectName = rs.getClass().getCanonicalName();
-
-        //rs.getClass().getConstructor();
-
-        ArrayList<Object> rows = new ArrayList<Object>();
+        //makes an arraylist that will read from the database
+        ArrayList<String> rows = new ArrayList<>();
         while(rs.next()){
-                for(int i=1;i< fields.length;i++){
-                    rows.add(rs.getObject(i));
-                    System.out.println(rs.getObject(i));
+                for(int i=1;i<fields.length-24;i++){
+                    rows.add(rs.getObject(i).toString());
                 }
         }
-
-
-        return result;
+        return rows;
     }//end read
 
 
