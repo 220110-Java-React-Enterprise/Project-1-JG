@@ -2,11 +2,8 @@ package servlets;
 
 import pojos.*;
 import repos.ItemRepo;
-import utils.GlobalStore;
+import utils.FileLogger;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,109 +15,118 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DataServlet extends HttpServlet {
     private ItemRepo itemRepo;
     
+
+    /**
+     * Initializes the repo for the servlet.
+     */
     @Override
     public void init() {
         // new repo
         itemRepo = new ItemRepo();
     }
 
-
+    /**
+     * Performs the HTTP GET verb.
+     * @param req   request body
+     * @param resp  response body
+     */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String nameOfThing = " yup ";
-        nameOfThing = readURI(req);
-        ObjectMapper mapper = new ObjectMapper();
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            String nameOfThing = " yup ";
+            nameOfThing = readURI(req);
+            ObjectMapper mapper = new ObjectMapper();
 
-        switch (nameOfThing){
-            case "accessory" ://code for accessory
-                Accessory accessory = GlobalStore.getAccessory();
-                String JSONaccessory = mapper.writeValueAsString(accessory);
-                resp.getWriter().print(JSONaccessory);
-                resp.setStatus(202);
-                break;
-            case "console" ://code for console. just copy accessory
-                Console con = GlobalStore.getConsole();
-                String JSONconsole = mapper.writeValueAsString(con);
-                resp.getWriter().print(JSONconsole);
-                resp.setStatus(202);
-                break;
-            case "controller" ://code for controller
-                Controller cont = GlobalStore.getController();
-                String JSONcontroller = mapper.writeValueAsString(cont);
-                resp.getWriter().print(JSONcontroller);
-                resp.setStatus(202);
-                break;
-            case "game" ://code for game
-                Game game = GlobalStore.getGame();
-                String JSONgame = mapper.writeValueAsString(game);
-                resp.getWriter().print(JSONgame);
-                resp.setStatus(202);
-                break;
-            default://code for default
-                resp.setStatus(501);
-                break;
+            switch (nameOfThing){
+                case "item"://code for item
+                    Item item = new Item();
+                    String JSONitem = mapper.writeValueAsString(item);
+                    resp.getWriter().print(JSONitem);
+                    resp.setStatus(202);
+                default://code for default
+                    resp.setStatus(501);
+                    break;
+            }
+        } catch (Exception e) {
+            FileLogger.getFileLogger().log(e);
+            resp.setStatus(500);
         }
     }
 
 
+    /**
+     * Performs the HTTP POST verb.
+     * @param req   request body
+     * @param resp  response body
+     */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String nameOfThing = " yup ";
-        nameOfThing = readURI(req);
-        ObjectMapper mapper = new ObjectMapper();
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            String nameOfThing = " yup ";
+            nameOfThing = readURI(req);
+            ObjectMapper mapper = new ObjectMapper();
 
-        System.out.println(nameOfThing);
+            System.out.println(nameOfThing);
 
-        switch (nameOfThing){
-            case "accessory" ://code for accessory
-                Accessory payloadAccessory = mapper.readValue(req.getInputStream(), Accessory.class);
-                GlobalStore.setAccessory(payloadAccessory);
-                resp.setStatus(202);
-                break;
-            case "console" ://code for console
-                Console payloadConsole = mapper.readValue(req.getInputStream(), Console.class);
-                GlobalStore.setConsole(payloadConsole);
-                resp.setStatus(202);
-                break;
-            case "controller" ://code for controller
-                Controller payloadController = mapper.readValue(req.getInputStream(), Controller.class);
-                GlobalStore.setController(payloadController);
-                resp.setStatus(202);
-                break;
-            case "game" ://code for game
-                Game payloadGame = mapper.readValue(req.getInputStream(), Game.class);
-                GlobalStore.setGame(payloadGame);
-                resp.setStatus(202);
-                break;
-            case "item":
-                Item payloadItem = mapper.readValue(req.getInputStream(), Item.class);
-                itemRepo.createItem(payloadItem);
-                resp.setStatus(202);
-                break;
-            default://code for default
-                resp.setStatus(501);
-                break;
+            switch (nameOfThing){
+                case "item":
+                    Item payloadItem = mapper.readValue(req.getInputStream(), Item.class);
+                    itemRepo.createItem(payloadItem);
+                    resp.setStatus(202);
+                    break;
+                default://code for default
+                    resp.setStatus(501);
+                    break;
+            }
+        } catch (Exception e) {
+            FileLogger.getFileLogger().log(e);
+            resp.setStatus(500);
         }
     }
 
 
+    /**
+     * Performs the HTTP DELETE verb.
+     * @param req   request body
+     * @param resp  response body
+     */
     //TODO implement this
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+
+        } catch (Exception e) {
+            FileLogger.getFileLogger().log(e);
+            resp.setStatus(500);
+        }
     }
 
 
+    /**
+     * Performs the HTTP PUT verb.
+     * @param req   request body
+     * @param resp  response body
+     */
     //TODO implement this
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+
+        } catch (Exception e) {
+            FileLogger.getFileLogger().log(e);
+            resp.setStatus(500);
+        }
     }
 
 
+    /**
+     * Helper function that parses the URI for switching between contexts dynamically.
+     * @param req request body
+     * @return returns the final part of the URI
+     */
     private String readURI(HttpServletRequest req){
         String temp = req.getRequestURI();
         String[] uri = temp.split("/");
-        return uri[uri.length-1];
+        return uri[uri.length - 1];
     }
 }
