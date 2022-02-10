@@ -81,12 +81,12 @@ public class Repository {
                     pstmt.setDouble(i + 1, (Double)fields[i].get(obj));
                     break;
             
-                // INT -> Integer
+                // BOOL -> Boolean
                 case BOOL:
                     pstmt.setBoolean(i + 1, (Boolean)fields[i].get(obj));
                     break;
         
-                // INT -> Integer
+                // BIGINT -> Long
                 case BIGINT:
                     pstmt.setLong(i + 1, (Long)fields[i].get(obj));
                     break;
