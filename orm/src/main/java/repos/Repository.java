@@ -102,16 +102,14 @@ public class Repository {
         PreparedStatement pstmt = ConnectionManager.getConnection().prepareStatement(sql);
         results rs = pstmt.executeQuery();
 
-        return read(repo);
+        // retrieve all fields and iterate through them
+        Field[] fields = obj.getClass().getDeclaredFields();
 
-//        pstmt.getId(id);
-//        return read(obj);
+        for (int i = 0; i < fields.length; i++) {
+            // temporarily set fields as accessible
+            fields[i].setAccessible(true);
 
-
-
-
-
-
+        return read(pstmt);
     }
 
 
