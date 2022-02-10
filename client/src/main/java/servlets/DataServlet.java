@@ -1,7 +1,10 @@
 package servlets;
 
+import exceptions.MalformedTableException;
 import pojos.*;
 import repos.ItemRepo;
+import scriptors.SQLScriptor;
+import utils.FileLogger;
 import utils.GlobalStore;
 
 import java.io.IOException;
@@ -24,52 +27,38 @@ public class DataServlet extends HttpServlet {
         itemRepo = new ItemRepo();
     }
 
-
+    //CHANGE this so it gets objects from the database not locally
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String nameOfThing = " yup ";
         nameOfThing = readURI(req);
         ObjectMapper mapper = new ObjectMapper();
+            //what happened to objectReflectionManager?
 
-        switch (nameOfThing){
-            case "accessory" ://code for accessory
-                Accessory accessory = GlobalStore.getAccessory();
-                String JSONaccessory = mapper.writeValueAsString(accessory);
-                resp.getWriter().print(JSONaccessory);
-                resp.setStatus(202);
-                break;
-            case "console" ://code for console. just copy accessory
-                Console con = GlobalStore.getConsole();
-                String JSONconsole = mapper.writeValueAsString(con);
-                resp.getWriter().print(JSONconsole);
-                resp.setStatus(202);
-                break;
-            case "controller" ://code for controller
-                Controller cont = GlobalStore.getController();
-                String JSONcontroller = mapper.writeValueAsString(cont);
-                resp.getWriter().print(JSONcontroller);
-                resp.setStatus(202);
-                break;
-            case "game" ://code for game
-                Game game = GlobalStore.getGame();
-                String JSONgame = mapper.writeValueAsString(game);
-                resp.getWriter().print(JSONgame);
-                resp.setStatus(202);
-                break;
-            default://code for default
-                resp.setStatus(501);
-                break;
+        Item item = new Item();
+        String sql="nope";
+        try {
+            sql = SQLScriptor.buildSelectStatement(item);//this should return select item table statemnet
+        } catch (MalformedTableException e) {
+            FileLogger.getFileLogger().log(e);
         }
-    }
+
+        itemRepo.readAllItems(item);
+        String whateverMan = mapper.writeValueAsString(itemRepo.readAllItems(item));
+        resp.getWriter().print(whateverMan);
+        resp.setStatus(202);
+
+    }//end doGet
 
 
+        //this apparently still works but only with items? or maybe he is just bypassing it entirely???
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String nameOfThing = " yup ";
         nameOfThing = readURI(req);
         ObjectMapper mapper = new ObjectMapper();
+            //CHANGE this so it gets objects from the database not locally
 
-        System.out.println(nameOfThing);
 
         switch (nameOfThing){
             case "accessory" ://code for accessory
