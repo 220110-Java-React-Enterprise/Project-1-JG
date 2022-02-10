@@ -25,7 +25,12 @@ public class DataServlet extends HttpServlet {
         itemRepo = new ItemRepo();
     }
 
-    //CHANGE this so it gets objects from the database not locally
+    
+    /**
+     * Performs the HTTP GET verb.
+     * @param req   request body
+     * @param resp  response body
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -49,7 +54,7 @@ public class DataServlet extends HttpServlet {
             resp.setStatus(500);
         }
 
-    }//end doGet
+    }
 
 
     /**
