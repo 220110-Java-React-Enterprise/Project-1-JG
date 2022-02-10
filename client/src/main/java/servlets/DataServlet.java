@@ -1,15 +1,15 @@
 package servlets;
 
-import pojos.*;
-import repos.ItemRepo;
-import utils.FileLogger;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import pojos.Item;
+import repos.ItemRepo;
+import utils.FileLogger;
 
 @WebServlet("/*")
 public class DataServlet extends HttpServlet {
@@ -25,11 +25,7 @@ public class DataServlet extends HttpServlet {
         itemRepo = new ItemRepo();
     }
 
-    /**
-     * Performs the HTTP GET verb.
-     * @param req   request body
-     * @param resp  response body
-     */
+    //CHANGE this so it gets objects from the database not locally
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -39,8 +35,8 @@ public class DataServlet extends HttpServlet {
 
             switch (nameOfThing){
                 case "item"://code for item
-                    Item item = itemRepo.readItem(new Item());
-                    String JSONitem = mapper.writeValueAsString(item);
+                    Item[] items = itemRepo.readAllItems(new Item());
+                    String JSONitem = mapper.writeValueAsString(items);
                     resp.getWriter().print(JSONitem);
                     resp.setStatus(200);
                     break;
@@ -52,7 +48,8 @@ public class DataServlet extends HttpServlet {
             FileLogger.getFileLogger().log(e);
             resp.setStatus(500);
         }
-    }
+
+    }//end doGet
 
 
     /**

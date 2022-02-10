@@ -3,8 +3,10 @@ package repos;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import annotations.Column;
 import enums.SQLType;
@@ -94,15 +96,25 @@ public class Repository {
 
 
     //TODO reflective READ statement
-    public Object read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
+    public ArrayList<String> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException, NoSuchMethodException {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildSelectStatement(obj), Statement.RETURN_GENERATED_KEYS);
 
-        Object newObj = new Object();
-        
-        return newObj;
-    }
+        //gets the output of the SQL query
+        ResultSet rs = pstmt.executeQuery();
+        //puts them into a field array
+        Field[] fields = rs.getClass().getDeclaredFields();
+
+        //makes an arraylist that will read from the database
+        ArrayList<String> rows = new ArrayList<>();
+        while(rs.next()){
+                for(int i=1;i<fields.length-24;i++){
+                    rows.add(rs.getObject(i).toString());
+                }
+        }
+        return rows;
+    }//end read
 
 
     //TODO reflective UPDATE statement
