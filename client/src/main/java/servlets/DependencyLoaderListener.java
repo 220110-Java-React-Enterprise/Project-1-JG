@@ -5,14 +5,20 @@ import javax.servlet.ServletContextListener;
 
 public class DependencyLoaderListener implements ServletContextListener {
 
+    /**
+     * Initializes the servlet context.
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println("Servlet Container contextInitialized method...");
+        
     }
 
 
+    /**
+     * Destroys the servlet context.
+     */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("Servlet Container contextDestroyed method...");
+        
     }
 }

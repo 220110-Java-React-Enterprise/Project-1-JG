@@ -1,10 +1,12 @@
 package repos;
 
-import java.awt.event.ItemEvent;
 import java.lang.reflect.Field;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import annotations.Column;
 import enums.SQLType;
@@ -21,7 +23,7 @@ public class Repository {
     /**
      * Start the connection with the database when given a connectionString.
      * @param connectionString string for connecting to database
-     * @throws SQLException when the
+     * @throws SQLException if the database connection is unsuccessful
      */
     public void startConnection(String connectionString) throws SQLException {
         // try to connect to the database given a connectionString
@@ -31,16 +33,22 @@ public class Repository {
 
     /**
      * Get the connection through the ORM's ConnectionManager.
-     * @return if successful, returns an initialized Connection object;
-     *         otherwise, returns a null Connection object
+     * @return if successful, returns an initialized Connection object
+     * @throws ConnectionException if the connection is not yet established
      */
     public Connection getConnection() throws ConnectionException {
         return ConnectionManager.getConnection();
     }
 
 
-    //TODO this should call buildCreateTableStatement()
-    //!     notably we may just not do dynamic tables for timesake
+    /**
+     * Add an object to the database.
+     * @param obj object to add to database
+     * @throws SQLException if the database connection is unsuccessful
+     * @throws ConnectionException if the connection is not yet established
+     * @throws MalformedTableException if the annotations were not done properly
+     * @throws IllegalAccessException accessing something that shouldn't be accessed
+     */
     public void create(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
@@ -73,12 +81,12 @@ public class Repository {
                     pstmt.setDouble(i + 1, (Double)fields[i].get(obj));
                     break;
             
-                // INT -> Integer
+                // BOOL -> Boolean
                 case BOOL:
                     pstmt.setBoolean(i + 1, (Boolean)fields[i].get(obj));
                     break;
         
-                // INT -> Integer
+                // BIGINT -> Long
                 case BIGINT:
                     pstmt.setLong(i + 1, (Long)fields[i].get(obj));
                     break;
@@ -93,8 +101,15 @@ public class Repository {
     }
 
 
-    //TODO reflective READ statement
-    public ArrayList<String> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException, NoSuchMethodException {
+    /**
+     * Reads all objects from the database.
+     * @param obj type of object to read
+     * @throws SQLException if the database connection is unsuccessful
+     * @throws ConnectionException if the connection is not yet established
+     * @throws MalformedTableException if the annotations were not done properly
+     * @throws IllegalAccessException accessing something that shouldn't be accessed
+     */
+    public ArrayList<String> read(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildSelectStatement(obj), Statement.RETURN_GENERATED_KEYS);
@@ -115,18 +130,102 @@ public class Repository {
     }//end read
 
 
-    //TODO reflective UPDATE statement
+    /**
+     * Updates an object in the database.
+     * @param obj what object to update
+     * @throws SQLException if the database connection is unsuccessful
+     * @throws ConnectionException if the connection is not yet established
+     * @throws MalformedTableException if the annotations were not done properly
+     * @throws IllegalAccessException accessing something that shouldn't be accessed
+     */
     public void update(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildUpdateStatement(obj), Statement.RETURN_GENERATED_KEYS);
+        
+        // retrieve all fields and iterate through them
+        Field[] fields = obj.getClass().getDeclaredFields();
+
+        for (int i = 1; i < fields.length; i++) {
+            // temporarily set fields as accessible
+            fields[i].setAccessible(true);
+
+            // do not need to check for present of Column as associated SQLScriptor method checks
+            SQLType type = fields[i].getAnnotation(Column.class).type();
+
+            // add to prepared statement based on type
+            switch (type) {
+                // VARCHAR -> String
+                case VARCHAR:
+                    pstmt.setString(i, (String)fields[i].get(obj));
+                    break;
+                
+                // INT -> Integer
+                case INT:
+                    pstmt.setInt(i, (Integer)fields[i].get(obj));
+                    break;
+                
+                // NUMERIC -> Double
+                case NUMERIC:
+                    pstmt.setDouble(i, (Double)fields[i].get(obj));
+                    break;
+            
+                // BOOL -> Boolean
+                case BOOL:
+                    pstmt.setBoolean(i, (Boolean)fields[i].get(obj));
+                    break;
+        
+                // BIGINT -> Long
+                case BIGINT:
+                    pstmt.setLong(i, (Long)fields[i].get(obj));
+                    break;
+            }
+
+            // unset fields as accessible
+            fields[i].setAccessible(false);
+        }
+
+        // set id since it is last and separate
+        fields[0].setAccessible(true);
+        pstmt.setInt(fields.length, (Integer)fields[0].get(obj));
+        fields[0].setAccessible(false);
+
+        // execute the built prepared statement
+        pstmt.executeUpdate();
     }
 
 
-    //TODO reflective DELETE statement
+    /**
+     * Deletes an object from the database.
+     * @param obj what object to delete
+     * @throws SQLException if the database connection is unsuccessful
+     * @throws ConnectionException if the connection is not yet established
+     * @throws MalformedTableException if the annotations were not done properly
+     * @throws IllegalAccessException accessing something that shouldn't be accessed
+     */
     public void delete(Object obj) throws SQLException, ConnectionException, MalformedTableException, IllegalAccessException {
         // start the prepared statement
         PreparedStatement pstmt = ConnectionManager.getConnection().
             prepareStatement(SQLScriptor.buildDeleteStatement(obj), Statement.RETURN_GENERATED_KEYS);
+        
+        // retrieve all fields
+        Field[] fields = obj.getClass().getDeclaredFields();
+        
+        // look for primary key
+        for (Field field : fields) {
+            if (field.getAnnotation(Column.class).primaryKey()) {
+                // temporarily set accessible
+                field.setAccessible(true);
+
+                // provide the id of object to delete
+                pstmt.setInt(1, (Integer)field.get(obj));
+
+                // unset fields as accessible
+                field.setAccessible(false);
+            }
+        }
+
+        // execute the built prepared statement
+        pstmt.execute();
     }
 }
